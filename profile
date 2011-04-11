@@ -1,8 +1,3 @@
-#
-# Compiled and copied from various authors
-#  - https://github.com/jasoncodes/dotfiles/blob/master/install.sh
-#
-
 # Locale
 export LANG=en_AU.UTF-8
 export LC_CTYPE=en_US.UTF-8

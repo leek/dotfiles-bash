@@ -1,10 +1,4 @@
 #!/bin/bash -e
-
-#
-# Compiled and copied from various authors
-#  - https://github.com/jasoncodes/dotfiles/blob/master/install.sh
-#
-
 cd
 
 [ -d .dotfiles ] || git clone git://github.com/leek/dotfiles.git .dotfiles
