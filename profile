@@ -3,12 +3,17 @@ export LANG=en_AU.UTF-8
 export LC_CTYPE=en_US.UTF-8
 
 # General
+export LSCOLORS="ExGxFxdxCxDxDxhbadExEx"
+export CLICOLOR=1
 export PS1='\u@\h:\w\$ '
 export FIGNORE="CVS:.DS_Store:.svn"
 export EDITOR='nano'
 export PAGER='less -SFX'
 export MAKEFLAGS='-j 3'
 complete -d cd mkdir rmdir
+
+# Our own bin dir at the highest priority, followed by /usr/local/bin
+export PATH=~/bin:/usr/local/bin:/usr/local/sbin:"$PATH"
 
 if [ "$TERM_PROGRAM" == "Apple_Terminal" -a -x "`which mate`" ]
 then
@@ -37,9 +42,6 @@ then
         open -f -a /Applications/Preview.app
     }
 fi
-
-# Our own bin dir at the highest priority, followed by /usr/local/bin
-export PATH=~/bin:/usr/local/bin:/usr/local/sbin:"$PATH"
 
 # Color
 if ls --version 2> /dev/null | grep -q 'GNU coreutils'
@@ -76,6 +78,8 @@ function glp()
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
+alias ls="ls -G"
+alias ll="ls -al"
 alias qt='open -a "QuickTime Player"'
 alias gl='git lg --all'
 alias glw='glp --word-diff'
@@ -220,7 +224,7 @@ function prompt_command ()
     export PS1="${PS1} \\[\\033[00m\\]${WPATH} "
 
     # Add git status
-    export PS1="$PS1"'\[\033[01;30m\]$(__git_ps1 " (%s)")'
+    export PS1="$PS1"'\[\033[01;30m\]$(__git_ps1 "(%s)")'
 
     if [ $GOOD -eq 0 ]; then
         export PS1="${PS1}\\[\\033[1;32m\\]"
