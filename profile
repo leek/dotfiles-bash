@@ -13,6 +13,7 @@ export MAKEFLAGS='-j 3'
 complete -d cd mkdir rmdir
 
 # Our own bin dir at the highest priority, followed by /usr/local/bin
+export GEM_HOME='$(brew --prefix)/Cellar/gems/1.8'
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:"$PATH"
 
 if [ "$TERM_PROGRAM" == "Apple_Terminal" -a -x "`which mate`" ]
