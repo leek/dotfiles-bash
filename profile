@@ -13,7 +13,6 @@ export MAKEFLAGS='-j 3'
 complete -d cd mkdir rmdir
 
 # Our own bin dir at the highest priority, followed by /usr/local/bin
-export GEM_HOME='$(brew --prefix)/Cellar/gems/1.8'
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:"$PATH"
 
 if [ "$TERM_PROGRAM" == "Apple_Terminal" -a -x "`which mate`" ]
@@ -128,10 +127,14 @@ unset MAILCHECK
 # Check for window resizing when ever the prompt is displayed
 shopt -s checkwinsize
 
-if [ "$TERM" == "xterm" -o "$TERM" == "xterm-color" ]
-then
-    export PROMPT_COMMAND="$PROMPT_COMMAND; "'echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
+# Enable RVM if available
+if [[ -s "$HOME/.rvm/scripts/rvm" ]]; then
+    source "$HOME/.rvm/scripts/rvm"
+elif [[ -s "/usr/local/rvm/scripts/rvm" ]]; then
+    source "/usr/local/rvm/scripts/rvm"
 fi
+[[ -n "$rvm_path" ]] && [[ -r "$rvm_path/scripts/completion" ]] && source "$rvm_path/scripts/completion"
+export rvm_pretty_print_flag=1
 
 # Load Homebrew's shell completion
 if which brew > /dev/null && [ -f `brew --prefix`/etc/bash_completion ]
