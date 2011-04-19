@@ -1,0 +1,28 @@
+[user]
+	name = leek
+	email = leeked@gmail.com
+[alias]
+	ci = commit
+	co = checkout
+	branches = branch -a
+	unadd = reset HEAD
+	amend = commit -a --amend
+	last = log -1 HEAD
+[color]
+	branch = auto
+	diff = auto
+	status = auto
+[color "branch"]
+	current = green
+	local = blue
+	remote = yellow
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+[pager]
+    color = true
+[core]
+    excludesfile = $HOME/.gitignore
+[push]
+	default = current
