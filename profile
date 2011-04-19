@@ -10,10 +10,12 @@ export FIGNORE="CVS:.DS_Store:.svn"
 export EDITOR='nano'
 export PAGER='less -SFX'
 export MAKEFLAGS='-j 3'
+export HISTCONTROL=ignorespace:ignoredups
+
 complete -d cd mkdir rmdir
 
 # Our own bin dir at the highest priority, followed by /usr/local/bin
-export PATH=~/bin:/usr/local/bin:/usr/local/sbin:"$PATH"
+export PATH="~/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 
 if [ "$TERM_PROGRAM" == "Apple_Terminal" -a -x "`which mate`" ]
 then
@@ -78,6 +80,7 @@ function glp()
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
+alias cdd="cd -"
 alias ls="ls -G"
 alias ll="ls -al"
 alias qt='open -a "QuickTime Player"'
@@ -93,12 +96,12 @@ alias gdsw='gdw --cached'
 alias gar='git reset HEAD'
 alias garp='git reset -p HEAD'
 alias gap='git add -p'
-alias gau='git ls-files --other --exclude-standard -z | xargs -0 git add -Nv'
-alias gaur="git ls-files --exclude-standard --modified -z | xargs -0 git ls-files --stage -z | awk 'BEGIN { RS=\"\0\"; FS=\"\t\"; ORS=\"\0\" } { if (\$1 ~ / e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 /) { sub(/^[^\t]+\t/, \"\", \$0); print } }' | xargs -0t -n 1 git reset -q -- 2>&1 | sed -e \"s/^git reset -q -- /reset '/\" -e \"s/ *$/'/\""
 alias gc='EDITOR="mate -wl1" git commit -v'
 alias gca='gc --amend'
 alias grt='git_current_tracking > /dev/null && git rebase -i $(git_current_tracking)'
 alias gp='git push'
+alias develop="git checkout develop"
+alias master="git checkout master"
 alias timestamp='gawk "{now=strftime(\"%F %T \"); print now \$0; fflush(); }"'
 
 #
