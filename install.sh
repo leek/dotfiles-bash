@@ -23,6 +23,8 @@ function create_link()
     local SRC="$1"
     local DST="$2"
 
+	echo "Linking $SRC -> $DST"
+
     if [ ! -e "$DST" ]
     then
         ln -sv "$SRC" "$DST"
