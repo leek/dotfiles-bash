@@ -228,7 +228,7 @@ function prompt_command ()
     export PS1="${PS1} \\[\\033[00m\\]${WPATH} "
 
     # Add git status
-    export PS1="$PS1"'\[\033[01;30m\]$(__git_ps1 "(%s)")'
+    export PS1="$PS1"'\[\033[01;30m\]$(__git_ps1 "(%s) ")'
 
     if [ $GOOD -eq 0 ]; then
         export PS1="${PS1}\\[\\033[1;32m\\]"
