@@ -1,6 +1,6 @@
 [user]
-	name = leek
-	email = leeked@gmail.com
+	name = chris.jones
+	email = chris.jones@bronto.com
 [alias]
 	ci = commit
 	co = checkout
@@ -24,5 +24,7 @@
     color = true
 [core]
     excludesfile = $HOME/.gitignore
+	autocrlf = input
+	safecrlf = true
 [push]
 	default = current
