@@ -8,14 +8,6 @@ cd
 
     TEMPFILE="`mktemp -t install.XXXXXX`"
     trap '{ rm -f "$TEMPFILE"; }' EXIT
-
-    set +e
-    git fetch origin
-    git show origin/master:profile > "$TEMPFILE"
-    source "$TEMPFILE"
-    set -e
-
-    gup
 )
 
 function create_link()
@@ -44,12 +36,6 @@ function create_link()
 
 find .dotfiles -maxdepth 1 -type f -not -name 'install.sh' -not -name 'README*' | while read SRC
 do
-    DST="`echo "$SRC" | sed -e 's#.*/#.#'`"
-    if echo "$SRC" | grep -q /profile$
-    then
-        create_link "$SRC" .bash_profile
-        create_link "$SRC" .bashrc
-    else
-        create_link "$SRC" "$DST"
-    fi
+    DST="`echo "$SRC" | sed -e 's#.*/##'`"
+    create_link "$SRC" "$DST"
 done
