@@ -1,0 +1,33 @@
+function prompt_command ()
+{
+    GOOD=$?
+
+    export PS1="\\[\\033[${COLOR}m\\]$USER"
+    if [ "$COLOR" == "" ]; then
+        export PS1="${PS1}@\\h"
+    fi
+
+    WPATH=`echo $PWD | sed "s#$HOME#~#"`
+    WPATH2=""
+    while [ "$WPATH" != "$WPATH2" ]; do
+            WPATH2="$WPATH"
+            WPATH=`echo $WPATH | sed "s#/\(..\)[^/][^/]*/#/\\1/#"`
+    done
+    if [ `echo $WPATH | wc -c` -gt 20 ]; then
+            WPATH="\\W"
+    fi
+
+    export PS1="${PS1} \\[\\033[00m\\]${WPATH} "
+
+    # Add git status
+    export PS1="$PS1"'\[\033[01;30m\]$(__git_ps1 "(%s) ")'
+
+    if [ $GOOD -eq 0 ]; then
+        export PS1="${PS1}\\[\\033[1;32m\\]"
+    else
+        export PS1="${PS1}\\[\\033[1;31m\\]"
+    fi
+    export PS1="${PS1}\\$\\[\\033[00m\\] "
+}
+
+export PROMPT_COMMAND=prompt_command

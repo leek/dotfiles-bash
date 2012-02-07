@@ -1,0 +1,37 @@
+[apply]
+    whitespace = fix
+[core]
+    excludesfile = ~/.gitignore
+    attributesfile = ~/.gitattributes
+    autocrlf = input
+    safecrlf = true
+    whitespace = fix,space-before-tab,tab-in-indent,trailing-space
+[alias]
+    ci = commit
+    co = checkout
+    branches = branch -a
+    unadd = reset HEAD
+    amend = commit -a --amend
+    last = log -1 HEAD
+[color]
+    ui = auto
+    branch = auto
+    diff = auto
+    status = auto
+[color "branch"]
+    current = green
+    local = blue
+    remote = yellow
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+[pager]
+    color = true
+[push]
+    default = current
+[merge]
+	log = true
+[user]
+	name = Chris Jones
+	email = leeked@gmail.com
