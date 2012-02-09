@@ -1,5 +1,28 @@
-# Netbeans project files
+# General
+*.diff
+*.err
+*.orig
+*.log
+*.rej
+*.swo
+*.swp
+*.vi
+*~
+*.sass-cache
+
+# Editor/IDE
 nbproject/private
+.cache
+.project
+.settings
+.tmproj
+*.esproj
+*.sublime-project
+*.sublime-workspace
+_notes
+dwsync.xml
+*.komodoproject
+.komodotools
 
 # Folder view config files
 .DS_Store
@@ -9,8 +32,10 @@ Desktop.ini
 ._*
 Thumbs.db
 
-# Other VCS'
+# Source Control Systems
 .svn
+.hg
+.CSV
 
 # Files that might appear on external disks
 .Spotlight-V100
