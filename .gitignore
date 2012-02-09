@@ -1,3 +1,6 @@
+# Only .dotfiles repo
+/.extra
+
 # General
 *.diff
 *.err

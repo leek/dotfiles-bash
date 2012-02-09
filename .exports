@@ -29,6 +29,13 @@ export HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help"
 export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
 export PROMPT_COMMAND='history -a'
 shopt -s histappend
+shopt -s nocaseglob
+
+# Add global node_modules to PATH if available
+if [ -d /usr/local/lib/node_modules ]
+then
+	export PATH="/usr/local/lib/node_modules:$PATH"
+fi
 
 # Enable RVM if available
 if [[ -s "$HOME/.rvm/scripts/rvm" ]]; then
