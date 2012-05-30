@@ -1,11 +1,7 @@
-#[apply]
-#    whitespace = fix
 [core]
     excludesfile = ~/.dotfiles/.gitignore
-	attributesfile = ~/.dotfiles/.gitattributes
-    autocrlf = input
+    autocrlf = false
     safecrlf = false
-#    whitespace = fix,space-before-tab,tab-in-indent,trailing-space
 [alias]
     ci = commit
     co = checkout
@@ -31,4 +27,7 @@
 [push]
     default = current
 [merge]
-	log = true
+    log = true
+[user]
+    name = Chris Jones
+    email = leeked@gmail.com
