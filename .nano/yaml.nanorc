@@ -1,0 +1,15 @@
+syntax "yaml" "\.yaml$"
+header "^---" "%YAML"
+
+color brightgreen     "(^| )!!(binary|bool|float|int|map|null|omap|seq|set|str) "
+color brightmagenta  "\<(YES|yes|Y|y|TRUE|true|ON|on|NO|no|N|n|FALSE|false|OFF|off)\>"
+color red ":[[:space:]]" "\[" "\]" ":[[:space:]]+[|>]" "^[[:space:]]*- "
+color brightyellow "[[:space:]][\*&][A-Za-z0-9]+"
+color yellow   "[[:space:]]*"(\\.|[^"])*"($|[[:space:]])"
+color yellow   "[[:space:]]*'(\\.|[^'])*'($|[[:space:]])"
+color cyan  "(^|[[:space:]])#.*$"
+color brightblue "^---" "^\.\.\." "^%YAML" "^%TAG"
+
+color ,green "[[:space:]]+$"
+color ,red "    *"
+
