@@ -59,3 +59,6 @@ alias hide="defaults write com.apple.Finder AppleShowAllFiles -bool false && kil
 # Hide/show all desktop icons (useful when presenting)
 alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
 alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+
+# Fix bad Snow Leopard VPN
+alias restartvpn="sudo launchctl stop com.apple.racoon && sudo launchctl start com.apple.racoon"
