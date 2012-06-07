@@ -34,9 +34,9 @@ function create_link()
     fi
 }
 
-includes=( .bashrc .bash_profile .gitconfig .inputrc .nanorc )
+includes=( .bashrc .bash_profile .gitconfig .inputrc .nano .nanorc )
 
-find .dotfiles -maxdepth 1 -type f -not -name 'install.sh' -not -name 'README*' | while read SRC
+find .dotfiles -maxdepth 1 | while read SRC
 do
     DST="`echo "$SRC" | sed -e 's#.*/##'`"
 	if [[ ${includes[@]} =~ $DST ]]

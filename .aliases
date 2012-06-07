@@ -62,3 +62,13 @@ alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && k
 
 # Fix bad Snow Leopard VPN
 alias restartvpn="sudo launchctl stop com.apple.racoon && sudo launchctl start com.apple.racoon"
+
+# Services
+alias startmongo="sudo mongod run --config /usr/local/etc/mongod.conf"
+alias startredis="sudo redis-server /usr/local/etc/redis.conf"
+alias startgearman="sudo gearman -d"
+alias startmemcached="sudo /usr/local/bin/memcached -d"
+alias startelasticsearch="sudo elasticsearch -f -D es.config=/usr/local/Cellar/elasticsearch/0.19.4/config/elasticsearch.yml"
+alias startphp53="/usr/local/Cellar/php53/5.3.13/sbin/php-fpm --fpm-config /usr/local/etc/php/5.3/php-fpm.conf"
+alias startphp54="/usr/local/Cellar/php54/5.4.3/sbin/php-fpm --fpm-config /usr/local/etc/php/5.4/php-fpm.conf"
+alias startnginx="/usr/local/sbin/nginx"

@@ -2,7 +2,7 @@ function prompt_command ()
 {
     GOOD=$?
 
-    export PS1="\\[\\033[${COLOR}m\\]$USER"
+    export PS1="\\[\\033[00;32m\\]$USER"
     if [ "$COLOR" == "" ]; then
         export PS1="${PS1}@\\h"
     fi
@@ -17,10 +17,10 @@ function prompt_command ()
             WPATH="\\W"
     fi
 
-    export PS1="${PS1} \\[\\033[00m\\]${WPATH} "
+    export PS1="${PS1} \\[\\033[00;35m\\]${WPATH} "
 
     # Add git status
-    export PS1="$PS1"'\[\033[01;30m\]$(__git_ps1 "(%s) ")'
+    export PS1="$PS1"'\[\033[00;31m\]$(__git_ps1 "(%s) ")'
 
     if [ $GOOD -eq 0 ]; then
         export PS1="${PS1}\\[\\033[1;32m\\]"
