@@ -2,9 +2,9 @@ function prompt_command ()
 {
     GOOD=$?
 
-    export PS1="\\[\\033[00;32m\\]$USER"
+    export PS1="\\[\\033[00;00m\\]$USER"
     if [ "$COLOR" == "" ]; then
-        export PS1="${PS1}@\\h"
+        export PS1="${PS1}\[\033[0;36m\]@\[\033[1;37m\]\\h"
     fi
 
     WPATH=`echo $PWD | sed "s#$HOME#~#"`
