@@ -45,7 +45,6 @@ export HISTCONTROL=ignorespace:ignoredups
 # Make some commands not show up in history
 export HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help"
 export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
-export PROMPT_COMMAND='history -a'
 
 shopt -s histappend
 shopt -s nocaseglob
@@ -71,6 +70,7 @@ then
     . `brew --prefix`/etc/bash_completion
 fi
 
+# Load GRC
 if which brew > /dev/null && [ -f `brew --prefix`/etc/grc.bashrc ]
 then
     . `brew --prefix`/etc/grc.bashrc
