@@ -32,3 +32,8 @@
     default = current
 [merge]
 	log = true
+[user]
+	name = Chris Jones
+	email = leeked@gmail.com
+[github]
+	user = leek
