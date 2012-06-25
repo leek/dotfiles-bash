@@ -70,7 +70,7 @@ set matchbrackets "(<[{)>]}"
 ## double click), and execute shortcuts.  The mouse will work in the X
 ## Window System, and on the console when gpm is running.
 ##
-set mouse
+# set mouse
 
 ## Allow multiple file buffers (inserting a file will put it into a
 ## separate buffer).  You must have configured with --enable-multibuffer
@@ -136,7 +136,7 @@ set mouse
 ## will jump to that beginning (either forwards or backwards).  If the
 ## cursor is already at that position, it will jump to the true
 ## beginning of the line.
-set smarthome
+# set smarthome
 
 ## Use smooth scrolling as the default.
 # set smooth
@@ -313,6 +313,83 @@ set tabstospaces
 
 ##
 ## Local
-#include ~/.nano/apache2.nanorc
-#include ~/.nano/nginx.nanorc
-#include ~/.nano/yaml.nanorc
+include ~/.nano/apache2.nanorc
+include ~/.nano/apacheconf.nanorc
+#include ~/.nano/aptsrclist.nanorc
+#include ~/.nano/asm.nanorc
+include ~/.nano/bash.nanorc
+#include ~/.nano/c-file.nanorc
+#include ~/.nano/c.nanorc
+include ~/.nano/changelog.nanorc
+include ~/.nano/changelogs.nanorc
+#include ~/.nano/clike.nanorc
+include ~/.nano/conf.nanorc
+#include ~/.nano/config.nanorc
+#include ~/.nano/config2.nanorc
+#include ~/.nano/config3.nanorc
+#include ~/.nano/configfiles.nanorc
+#include ~/.nano/conky.nanorc
+include ~/.nano/css.nanorc
+include ~/.nano/debian.nanorc
+include ~/.nano/default.nanorc
+#include ~/.nano/delphi.nanorc
+#include ~/.nano/desc.nanorc
+#include ~/.nano/dotemacs.nanorc
+#include ~/.nano/ebuild.nanorc
+#include ~/.nano/ekghistory.nanorc
+#include ~/.nano/etc-stuff.nanorc
+#include ~/.nano/etcportage.nanorc
+#include ~/.nano/etcxml.nanorc
+#include ~/.nano/gentoo.nanorc
+#include ~/.nano/groff.nanorc
+#include ~/.nano/havp.nanorc
+include ~/.nano/html.nanorc
+include ~/.nano/httpstatuscodes.nanorc
+include ~/.nano/info.nanorc
+include ~/.nano/ini.nanorc
+include ~/.nano/initng.nanorc
+#include ~/.nano/initscript.nanorc
+include ~/.nano/java.nanorc
+include ~/.nano/js.nanorc
+include ~/.nano/log-stuff.nanorc
+#include ~/.nano/maincf.nanorc
+include ~/.nano/makefile.nanorc
+include ~/.nano/man.nanorc
+#include ~/.nano/mcchangelog.nanorc
+include ~/.nano/mimetype.nanorc
+#include ~/.nano/mutt.nanorc
+#include ~/.nano/named.nanorc
+include ~/.nano/nanorc.nanorc
+include ~/.nano/nginx.nanorc
+#include ~/.nano/nscd.nanorc
+#include ~/.nano/others.nanorc
+#include ~/.nano/paludis.nanorc
+#include ~/.nano/passwd.nanorc
+include ~/.nano/patch.nanorc
+include ~/.nano/perl.nanorc
+include ~/.nano/php.nanorc
+include ~/.nano/php2.nanorc
+#include ~/.nano/plaudis.nanorc
+#include ~/.nano/po.nanorc
+#include ~/.nano/postgresql.nanorc
+#include ~/.nano/pov.nanorc
+#include ~/.nano/privoxy.nanorc
+#include ~/.nano/profile.nanorc
+include ~/.nano/python.nanorc
+include ~/.nano/rcfiles-new.nanorc
+#include ~/.nano/rcfiles.nanorc
+include ~/.nano/rsync.nanorc
+include ~/.nano/ruby.nanorc
+include ~/.nano/sh.nanorc
+include ~/.nano/shlike.nanorc
+#include ~/.nano/softcam.nanorc
+#include ~/.nano/sources_list.nanorc
+#include ~/.nano/tab.nanorc
+#include ~/.nano/tcl.nanorc
+#include ~/.nano/tex.nanorc
+include ~/.nano/urls.nanorc
+#include ~/.nano/vhost.nanorc
+#include ~/.nano/xdefaults.nanorc
+include ~/.nano/xml.nanorc
+include ~/.nano/xorg.nanorc
+include ~/.nano/yaml.nanorc

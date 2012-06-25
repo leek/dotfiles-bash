@@ -1,11 +1,7 @@
-#[apply]
-#    whitespace = fix
 [core]
     excludesfile = ~/.dotfiles/.gitignore
-	attributesfile = ~/.dotfiles/.gitattributes
-    autocrlf = input
+    autocrlf = false
     safecrlf = false
-#    whitespace = fix,space-before-tab,tab-in-indent,trailing-space
 [alias]
     ci = commit
     co = checkout
