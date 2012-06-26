@@ -1,0 +1,4 @@
+*.pyc
+FileHistory.json
+*.cache
+Package Control.sublime-settings
