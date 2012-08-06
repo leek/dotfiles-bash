@@ -31,10 +31,7 @@
 [push]
 	default = upstream
 [merge]
-    log = true
-[user]
-    name = Chris Jones
-    email = leeked@gmail.com
+	log = true
 [difftool "Kaleidoscope"]
 	cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
 [difftool]

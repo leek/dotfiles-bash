@@ -1,0 +1,4 @@
+{
+    // The path to the TortoiseGit TortoiseProc.exe executable
+    "git_tortoiseproc_path": "C:/Program Files/TortoiseGit/bin/TortoiseProc.exe"
+}
