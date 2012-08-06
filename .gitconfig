@@ -2,7 +2,10 @@
     excludesfile = ~/.dotfiles/.gitignore
     autocrlf = false
     safecrlf = false
+	quotepath = false
 [alias]
+    ar = reset HEAD
+    st = status
     ci = commit
     co = checkout
     branches = branch -a
@@ -26,9 +29,15 @@
 [pager]
     color = true
 [push]
-    default = current
+	default = upstream
 [merge]
     log = true
 [user]
     name = Chris Jones
     email = leeked@gmail.com
+[difftool "Kaleidoscope"]
+	cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
+[difftool]
+	prompt = false
+[diff]
+	tool = Kaleidoscope
