@@ -3,21 +3,22 @@
     autocrlf = false
     safecrlf = false
 	quotepath = false
+	whitespace = trailing-space,space-before-tab,indent-with-non-tab
 [alias]
-    ar = reset HEAD
     st = status
     ci = commit
     co = checkout
     branches = branch -a
     unadd = reset HEAD
     amend = commit -a --amend
+    log5 = log -5
     last = log -1 HEAD
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	diff = diff -w
 [color]
-    ui = auto
+	ui = auto
     branch = auto
     diff = auto
-    status = auto
 [color "branch"]
     current = green
     local = blue
@@ -29,7 +30,7 @@
 [pager]
     color = true
 [push]
-	default = upstream
+	default = tracking
 [merge]
 	log = true
 [difftool "Kaleidoscope"]
@@ -38,3 +39,14 @@
 	prompt = false
 [diff]
 	tool = Kaleidoscope
+	renames = copies
+    mnemonicprefix = true
+[advice]
+	pushNonFastForward = false
+	statusHints = false
+[branch]
+	autosetupmerge = true
+[apply]
+	whitespace = nowarn
+[help]
+	autocorrect = 1

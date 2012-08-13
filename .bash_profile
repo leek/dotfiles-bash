@@ -18,6 +18,10 @@ set -o notify
 # Check for window resizing when ever the prompt is displayed
 shopt -s checkwinsize
 
+# Append to ~/.bash_history
+shopt -s histappend
+shopt -s nocaseglob
+
 # No mail notifications
 shopt -u mailwarn
 unset MAILCHECK

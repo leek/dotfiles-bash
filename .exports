@@ -65,9 +65,6 @@ export HISTCONTROL=ignoreboth
 export HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help"
 export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
 
-shopt -s histappend
-shopt -s nocaseglob
-
 # Add global node_modules to PATH if available
 if [ -d /usr/local/lib/node_modules ]; then
     export NODE_PATH="/usr/local/lib/node_modules"
