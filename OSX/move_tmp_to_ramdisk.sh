@@ -20,16 +20,27 @@ cat << "EOF" | sudo tee RamFS/RamFS > /dev/null
 #!/bin/sh
 # Create a RAM disk with same perms as mountpoint
 
+DEBUG=${2:-0}
+if [[ $DEBUG == "--debug" ]]; then
+    DEBUG=1
+fi
+
 RAMDisk() {
     mntpt=$1
     rdsize=$(($2*1024*1024/512))
     vol=$3
-    echo "Creating RamFS for $mntpt"
+    echo "Creating RamFS for: $mntpt"
     # Create the RAM disk.
+    if [[ $DEBUG == 1 ]]; then
+        echo "Executing: hdik -drivekey system-image=yes -nomount ram://$rdsize"
+    fi
     dev=`hdik -drivekey system-image=yes -nomount ram://$rdsize`
     # Successfull creation...
     if [ $? -eq 0 ] ; then
         # Create HFS on the RAM volume.
+        if [[ $DEBUG == 1 ]]; then
+            echo "Executing: newfs_hfs -v \"RAMDisk $vol\" $dev"
+        fi
         newfs_hfs -v "RAMDisk $vol" $dev
         # Store permissions from old mount point.
         eval `/usr/bin/stat -s $mntpt`
@@ -43,7 +54,7 @@ RAMDisk() {
 
 # Test for arguments.
 if [ -z $1 ]; then
-    echo "Usage: $0 [start|stop|restart] "
+    echo "Usage: $0 [start|stop|restart] [--debug]"
     exit 1
 fi
 
@@ -52,16 +63,15 @@ test -r /etc/rc.common || exit 1
 . /etc/rc.common
 
 StartService () {
-    ConsoleMessage "Starting RamFS disks..."
-    RAMDisk /private/tmp 256 Temp
-    RAMDisk /var/run 64 Run
-    #RAMDisk /var/db 1024
-    #mkdir -m 1777 /var/db/mds
+    ConsoleMessage "Starting RamFS Disks..."
+    RAMDisk /private/tmp 256 "Temp"
+    RAMDisk /var/run 64 "Run"
 }
+
 StopService () {
     ConsoleMessage "Stopping RamFS disks, nothing will be done here..."
-    # diskutil unmount /private/tmp /private/var/run
-    # diskutil unmount /private/var/run
+    diskutil unmount /private/tmp /private/var/run
+    diskutil unmount /private/var/run
 }
 
 RestartService () {
