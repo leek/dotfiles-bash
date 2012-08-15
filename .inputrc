@@ -13,13 +13,19 @@ set mark-symlinked-directories on
 "\e[A": history-search-backward
 
 # Do not autocomplete hidden files unless the pattern explicitly begins with a dot
-set match-hidden-files off
+set match-hidden-files on
 
 # Show all autocomplete results at once
 set page-completions off
 
 # Immediately show all possible completions
 set show-all-if-ambiguous on
+
+# This alters the default behavior of the completion functions in a fashion similar to show-all-if-ambiguous.
+# If set to ‘on’, words which have more than one possible completion without any possible partial completion
+# (the possible completions don't share a common prefix) cause the matches to be listed immediately instead
+# of ringing the bell. The default value is ‘off’.
+set show-all-if-unmodified on
 
 # If there are more than 200 possible completions for a word, ask to show them all
 set completion-query-items 200

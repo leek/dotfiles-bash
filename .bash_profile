@@ -26,7 +26,14 @@ shopt -s nocaseglob
 shopt -u mailwarn
 unset MAILCHECK
 
-# Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
-[ -e ~/.ssh/config ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2)" scp sftp ssh
+# Tab completion for ~/.ssh/config
+if [[ -e ~/.ssh/config ]]; then
+    complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2)" scp sftp ssh
+fi
+
+# Tab completion for ~/.ssh/known_hosts
+if [[ -e ~/.ssh/known_hosts ]]; then
+    complete -W "$(echo `cat ~/.ssh/known_hosts | cut -f 1 -d ' ' | sed -e s/,.*//g | uniq | grep -v "\["`;)" scp sftp ssh
+fi
 
 complete -d cd mkdir rmdir

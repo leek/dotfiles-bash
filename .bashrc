@@ -8,7 +8,7 @@
 
 [ -n "$PS1" ] && source ~/.bash_profile
 
-PROMPT_COMMAND="$PROMPT_COMMAND"'echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD##*/}\007"'
+# export PROMPT_COMMAND="$PROMPT_COMMAND"'echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD##*/}\007"'
 
 # Debug/Profile start
 # set +x

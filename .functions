@@ -1,5 +1,13 @@
 #!/bin/bash
 
+function myip {
+    res=$(curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+')
+    echo "$res"
+    if [[ "$OSTYPE" =~ ^darwin ]]; then
+        `echo "$res" | pbcopy`
+    fi
+}
+
 function trash() {
     mv $@ ~/.Trash/
 }

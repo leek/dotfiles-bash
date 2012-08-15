@@ -1,0 +1,25 @@
+# See: http://www4.informatik.uni-erlangen.de/~jnweiger/screen-faq.html
+
+# Support color X terminals
+termcap xterm 'XT:AF=\E[3%dm:AB=\E[4%dm:AX'
+terminfo xterm 'XT:AF=\E[3%p1%dm:AB=\E[4%p1%dm:AX'
+termcapinfo xterm 'XT:AF=\E[3%p1%dm:AB=\E[4%p1%dm:AX:hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
+termcap xtermc 'XT:AF=\E[3%dm:AB=\E[4%dm:AX'
+terminfo xtermc 'XT:AF=\E[3%p1%dm:AB=\E[4%p1%dm:AX'
+termcapinfo xtermc 'XT:AF=\E[3%p1%dm:AB=\E[4%p1%dm:AX:hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
+
+#
+# Auto-screen Support (http://taint.org/wk/RemoteLoginAutoScreen)
+
+# Detach on hangup
+autodetach on
+
+# No startup msg
+startup_message off
+
+# Always use a login shell
+shell -$SHELL
+
+# Auto-log
+logfile $HOME/lib/screen-logs/%Y%m%d-%n.log
+deflog on
