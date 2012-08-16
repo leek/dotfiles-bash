@@ -1,39 +1,85 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Sources:
-#     https://github.com/mathiasbynens/dotfiles/blob/master/.bash_profile
+# Initial PATH
+export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 
-for file in ~/.dotfiles/.{extra,exports,bash_aliases,functions}; do
-	[ -r "$file" ] && source "$file"
-done
-unset file
-
-if [ -f ~/.extra ]; then
-	source ~/.extra
+# Add global node_modules to PATH if available
+if [ -d /usr/local/lib/node_modules ]; then
+    export NODE_PATH="/usr/local/lib/node_modules"
 fi
 
-# Notify of bg job completion immediately
+# For permissions on OSX
+if [[ "$OSTYPE" =~ ^darwin ]]; then
+    export GEM_HOME="$HOME/.gem"
+    export GEM_PATH="$HOME/.gem"
+    export RUBYOPT=rubygems
+fi
+
+if [[ -z "$SHORT_USER" ]]; then
+    export SHORT_USER="$USER"
+fi
+
+# Editor defaults
+if [[ -x "`which subl`" ]]; then
+    export EDITOR='subl -w'
+    export GIT_EDITOR='subl -w'
+    export LESSEDIT='subl %f:%1m'
+elif [[ -x "`which mate`" ]]; then
+    export EDITOR='mate -w'
+    export GIT_EDITOR='mate -w'
+    export LESSEDIT='mate -l %lm %f'
+else
+    export EDITOR='nano'
+fi
+
+export FIGNORE="CVS:.DS_Store:.svn"
+export PAGER='less -SFX'
+export MAKEFLAGS='-j 3'
+export LC_ALL="en_US.UTF-8"
+export LANG="en_US"
+export LC_CTYPE="en_US.UTF-8"
+
 set -o notify
 
-# Check for window resizing when ever the prompt is displayed
 shopt -s checkwinsize
-
-# Append to ~/.bash_history
-shopt -s histappend
 shopt -s nocaseglob
-
-# No mail notifications
 shopt -u mailwarn
+
 unset MAILCHECK
 
-# Tab completion for ~/.ssh/config
-if [[ -e ~/.ssh/config ]]; then
-    complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2)" scp sftp ssh
+# Main directory
+DOTFILES="$HOME/.dotfiles"
+
+if [ -e $DOTFILES/custom/before.bash ]; then
+    source $DOTFILES/custom/before.bash
 fi
 
-# Tab completion for ~/.ssh/known_hosts
-if [[ -e ~/.ssh/known_hosts ]]; then
-    complete -W "$(echo `cat ~/.ssh/known_hosts | cut -f 1 -d ' ' | sed -e s/,.*//g | uniq | grep -v "\["`;)" scp sftp ssh
-fi
+# Includes
+source "$DOTFILES/includes/colors.bash"
+source "$DOTFILES/includes/prompt.bash"
+source "$DOTFILES/includes/history.bash"
+source "$DOTFILES/includes/colorful.bash"
 
-complete -d cd mkdir rmdir
+# Load enabled
+for source_type in "aliases" "completions" "functions"; do
+    if [ ! -d $DOTFILES/$source_type/enabled ]; then
+        continue
+    fi
+    for source_file in $DOTFILES/$source_type/enabled/*; do
+        if [ -e $source_file ]; then
+            source $source_file
+        fi
+    done
+done
+
+# Load all custom
+special_custom=( before.bash after.bash )
+for source_file in $DOTFILES/custom/*; do
+    if [ -e $source_file ]; then
+        source $source_file
+    fi
+done
+
+if [[ $PROMPT ]]; then
+    export PS1=$PROMPT
+fi

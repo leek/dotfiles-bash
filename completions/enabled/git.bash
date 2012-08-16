@@ -1,0 +1,1 @@
+/Users/chris.jones/.dotfiles/completions/available/git.bash
