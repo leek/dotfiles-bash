@@ -1,11 +1,6 @@
-# defaults
-# Bash command line completion for defaults
-#
-# Created by Jonathon Mah on 2006-11-08.
-# Copyright 2006 Playhaus. All rights reserved.
-#
-# Version 1.0 (2006-11-08)
+#!/usr/bin/env bash
 
+[[ $DF_DEBUG ]] && echo -e "\033[1;32mCompletion Loaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 
 _defaults_domains()
 {

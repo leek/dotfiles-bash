@@ -13,7 +13,7 @@
 # +----------------------------------------------------------------------+
 
 cd /System/Library/StartupItems
-sudo mkdir RamFS
+sudo mkdir -p RamFS
 sudo chown -R root:wheel RamFS
 sudo chmod -R u+rwX,g+rX,o+rX RamFS
 cat << "EOF" | sudo tee RamFS/RamFS > /dev/null

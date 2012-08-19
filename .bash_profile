@@ -1,37 +1,19 @@
 #!/usr/bin/env bash
 
-# Initial PATH
-export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+UNAME=$(uname)
+DF_ITEM_TYPES=( aliases completions functions )
+DF_CUSTOM_EXCLUDE=( before.bash after.bash )
+# DF_DEBUG=1
 
-# Add global node_modules to PATH if available
-if [ -d /usr/local/lib/node_modules ]; then
-    export NODE_PATH="/usr/local/lib/node_modules"
+if [[ $DF_DEBUG ]]; then
+    echo ""
+    echo -e "\033[1;32mLoaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 fi
 
-# For permissions on OSX
-if [[ "$OSTYPE" =~ ^darwin ]]; then
-    export GEM_HOME="$HOME/.gem"
-    export GEM_PATH="$HOME/.gem"
-    export RUBYOPT=rubygems
-fi
-
-if [[ -z "$SHORT_USER" ]]; then
-    export SHORT_USER="$USER"
-fi
-
-# Editor defaults
-if [[ -x "`which subl`" ]]; then
-    export EDITOR='subl -w'
-    export GIT_EDITOR='subl -w'
-    export LESSEDIT='subl %f:%1m'
-elif [[ -x "`which mate`" ]]; then
-    export EDITOR='mate -w'
-    export GIT_EDITOR='mate -w'
-    export LESSEDIT='mate -l %lm %f'
-else
-    export EDITOR='nano'
-fi
-
+export PATH="~/bin:/usr/local/bin:/usr/local/sbin:$PATH"
+export SHORT_USER="$USER"
+export DOTFILES="$HOME/.dotfiles"
+export EDITOR='nano'
 export FIGNORE="CVS:.DS_Store:.svn"
 export PAGER='less -SFX'
 export MAKEFLAGS='-j 3'
@@ -41,45 +23,41 @@ export LC_CTYPE="en_US.UTF-8"
 
 set -o notify
 
+# Set options
 shopt -s checkwinsize
 shopt -s nocaseglob
-shopt -u mailwarn
+shopt -s dotglob
+shopt -s cdspell
+shopt -s no_empty_cmd_completion
 
+# Unset options
+shopt -u mailwarn
 unset MAILCHECK
 
-# Main directory
-DOTFILES="$HOME/.dotfiles"
+[[ -e $DOTFILES/custom/before.bash ]] && source $DOTFILES/custom/before.bash
 
-if [ -e $DOTFILES/custom/before.bash ]; then
-    source $DOTFILES/custom/before.bash
-fi
+source $DOTFILES/lib/core.bash
+source $DOTFILES/lib/colors.bash
+source $DOTFILES/lib/prompt.bash
+source $DOTFILES/lib/history.bash
+source $DOTFILES/lib/colorful.bash
 
-# Includes
-source "$DOTFILES/includes/colors.bash"
-source "$DOTFILES/includes/prompt.bash"
-source "$DOTFILES/includes/history.bash"
-source "$DOTFILES/includes/colorful.bash"
+[[ is_mac ]] && source $DOTFILES/lib/osx.bash
+[[ is_linux ]] && source $DOTFILES/lib/linux.bash
 
-# Load enabled
-for source_type in "aliases" "completions" "functions"; do
-    if [ ! -d $DOTFILES/$source_type/enabled ]; then
-        continue
-    fi
-    for source_file in $DOTFILES/$source_type/enabled/*; do
-        if [ -e $source_file ]; then
-            source $source_file
-        fi
-    done
+# Load enabled types
+for item_type in "${DF_ITEM_TYPES[@]}"; do
+    _df_load_enabled_by_type $item_type
 done
 
 # Load all custom
-special_custom=( before.bash after.bash )
-for source_file in $DOTFILES/custom/*; do
-    if [ -e $source_file ]; then
-        source $source_file
-    fi
+for custom_file in $DOTFILES/custom/*.bash; do
+    in_array "$custom_file" "${DF_CUSTOM_EXCLUDE[@]}" && continue
+    [[ -x $DOTFILES/custom/$custom_file ]] && source $DOTFILES/custom/$custom_file
 done
 
 if [[ $PROMPT ]]; then
     export PS1=$PROMPT
 fi
+
+[[ -e $DOTFILES/custom/after.bash ]] && source $DOTFILES/custom/after.bash

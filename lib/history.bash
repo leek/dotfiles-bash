@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+[[ $DF_DEBUG ]] && echo -e "\033[1;32mLoaded:\033[39m $(basename ${BASH_SOURCE[0]})"
+
 # Append to bash_history if Terminal.app quits
 shopt -s histappend
 
@@ -7,7 +9,7 @@ export HISTSIZE=32768
 export HISTFILESIZE=$HISTSIZE
 export HISTCONTROL="ignoredups"
 export HISTCONTROL=erasedups
-export HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help"
+export HISTIGNORE="&:ls:ls *:cd:cd -:pwd;exit:date:* --help *:mutt:[bf]g:exit"
 export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
 export AUTOFEATURE=true autotest
 

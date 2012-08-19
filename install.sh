@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -e
+#!/bin/bash -e
 cd
 
 [ -d .dotfiles ] || git clone git://github.com/leek/dotfiles.git .dotfiles
@@ -10,156 +10,174 @@ cd
     trap '{ rm -f "$TEMPFILE"; }' EXIT
 )
 
-DOTFILES="$HOME/.dotfiles"
+cd
+
+CURRENT=`pwd`
+DOTFILES="${CURRENT}/.dotfiles"
+BACKUP_TIME="$(date +%Y%m%d_%H%M%S)"
 
 # So we have colors available
-source $DOTFILES/includes/colors.bash
-source $DOTFILES/includes/colorful.bash
+source $DOTFILES/lib/colors.bash
+source $DOTFILES/lib/colorful.bash
+source $DOTFILES/functions/available/default.bash
 
-# Do we want to make backups?
-while true; do
-    echo ""
-    echo -en "${echo_yellow}Make backups? ${COLORED_YESNO}"
-    read -p " " answer
-    case $answer in
-        [yY])
-            BACKUP_FILES=1
-            BACKUP_TIME="$(date +%Y%m%d_%H%M%S)"
-            break
-            ;;
-        [nN])
-            BACKUP_FILES=0
-            break
-            ;;
-        *)
-            echo -e "${echo_bold_red}Error! Please enter 'Y' or 'N'.${echo_reset_color}"
-    esac
-done
+#
+# Functions
+#
 
-# Backup ~/.bash_profile
-if [ $BACKUP_FILES == 1 ] && [ -f $HOME/$filename ]; then
-    filename=$HOME/.bash_profile_$BACKUP_TIME
-    echo ""
-    echo -e "Backing up ${echo_bold_white}$HOME/.bash_profile${echo_reset_color}..."
-    cp -R $HOME/.bash_profile $filename
-    if [[ -f $HOME/.bash_profile_$BACKUP_TIME ]]; then
-        echo -e " ${echo_green}${SYMBOL_POSITIVE} ${echo_cyan}$filename${echo_reset_color}"
+function _df_echo_file_status() {
+    local filename="$(basename $2)"
+    local reason=${3:-}
+    if [[ $1 == 'POSITIVE' ]]; then
+        echo -e " ${echo_green}${SYMBOL_POSITIVE} ${echo_cyan}$filename $reason${echo_reset_color}"
+    elif [[ $1 == 'NEGATIVE' ]]; then
+        echo -e " ${echo_red}${SYMBOL_NEGATIVE} ${echo_cyan}$filename $reason${echo_reset_color}"
     else
-        echo -e " ${echo_red}${SYMBOL_NEGATIVE} ${echo_cyan}$filename${echo_reset_color}"
-        exit
+        echo -e " ${echo_white}${SYMBOL_NEUTRAL} ${echo_cyan}$filename $reason${echo_reset_color}"
     fi
+}
+
+function _df_make_backup() {
+    local filepath=$1
+    local filename="$(basename $filepath)"
+    local filepath_backup="${filepath}_${BACKUP_TIME}"
+    echo ""
+    echo -e "Backing up ${echo_bold_white}$filename${echo_reset_color}..."
+    if [[ -e $filepath_backup ]]; then
+        _df_echo_file_status "NEGATIVE" "$filepath_backup" ": Backup already exists..."
+    else
+        if [[ -e $filepath ]]; then
+            cp -R "$filepath" "$filepath_backup"
+            if [[ -e $filepath_backup ]]; then
+                _df_echo_file_status "POSITIVE" "$filename"
+            else
+                _df_echo_file_status "NEGATIVE" "$filepath_backup" ": Failed"
+            fi
+        else
+            _df_echo_file_status "NEUTRAL" "$filename" ": Skipped..."
+        fi
+    fi
+}
+
+function _df_install_to_home() {
+    local filepath=$1
+    local filename="$(basename $filepath)"
+    if [[ $CREATE_LINKS == 1 ]]; then
+        ln -sF "$filepath"
+        if [[ -L $filename ]]; then
+            _df_echo_file_status "POSITIVE" "$filename"
+        else
+            _df_echo_file_status "NEGATIVE" "$filename" ": Failed"
+        fi
+    else
+        cp -R "$filepath" .
+        if [[ -e $filename ]]; then
+            _df_echo_file_status "POSITIVE" "$filename"
+        else
+            _df_echo_file_status "NEGATIVE" "$filename" ": Failed"
+        fi
+    fi
+}
+
+function _df_enable_item() {
+    local filename="$(basename $2)"
+    local enabledpath="$DOTFILES/$1/enabled/$filename"
+    local availpath="$DOTFILES/$1/available/$2"
+    if [[ ! -e $enabledpath ]] && [[ -e $availpath ]]; then
+        ln -sF "$availpath" "$enabledpath"
+        if [[ -L $enabledpath ]]; then
+            _df_echo_file_status "POSITIVE" "$filename"
+        else
+            _df_echo_file_status "NEGATIVE" "$filename" ": Failed"
+        fi
+    else
+        _df_echo_file_status "NEUTRAL" "$filename" ": Skipped..."
+    fi
+}
+
+#
+# Config Questions
+#
+
+echo ""
+echo -en "${echo_yellow}Make backups if file(s) already exist?${echo_reset_color}"
+if ask "" N; then
+    BACKUP_FILES=1
+    df_make_backup ".bash_profile"
+else
+    BACKUP_FILES=0
+    _df_echo_file_status "NEUTRAL" ".bash_profile" ": Skipped..."
 fi
 
-# Install ~/.bash_profile
 echo ""
-echo -e "Installing ${echo_bold_white}$DOTFILES/.bash_profile${echo_reset_color}..."
-ln -sF $DOTFILES/.bash_profile $HOME/.bash_profile
-echo -e " ${echo_green}${SYMBOL_POSITIVE} ${echo_cyan}$DOTFILES/.bash_profile${echo_reset_color}"
+echo -en "${echo_yellow}Create symlinks instead of copies?${echo_reset_color}"
+if ask "" Y; then
+    CREATE_LINKS=1
+else
+    CREATE_LINKS=0
+fi
+
+_df_install_to_home "$DOTFILES/.bash_profile"
 
 # Aliases, Completions, and Functions
 for source_type in "aliases" "completions" "functions"; do
-  while true; do
-    dest="$DOTFILES/$source_type/enabled"
-    mkdir -p $dest && cd $dest
-
+    # Install?
     echo ""
-    echo -en "${echo_yellow}Enable all ${echo_bold_yellow}${echo_underline_yellow}$source_type${echo_yellow}? ${COLORED_YESNO}"
-    read -p " " answer
-    case $answer in
-        [yY])
-            for source_file in $DOTFILES/$source_type/available/*; do
-                filename="$(basename $source_file)"
-                ln -sF $DOTFILES/$source_type/available/$filename $DOTFILES/$source_type/enabled/$filename
-                echo -e " ${echo_green}${SYMBOL_POSITIVE} ${echo_cyan}$filename${echo_reset_color}"
+    echo -en "${echo_yellow}Enable all ${echo_bold_yellow}${echo_underline_yellow}$source_type${echo_yellow}?${echo_reset_color}"
+    if ask "" Y; then
+        mkdir -p $DOTFILES/$source_type/enabled
+        for filepath in $DOTFILES/$source_type/available/*.bash; do
+            filename="$(basename $filepath)"
+            [[ -f $filepath ]] && _df_enable_item "$source_type" "$filename"
+        done
+        if [[ is_mac ]]; then
+            for filepath in $DOTFILES/$source_type/available/osx/*.bash; do
+                filename="$(basename $filepath)"
+                [[ -f $filepath ]] && _df_enable_item "$source_type" "osx/$filename"
             done
-            break
-            ;;
-        [nN])
-            for source_file in $DOTFILES/$source_type/available/*; do
-                filename="$(basename $source_file)"
-                echo -e " ${echo_red}${SYMBOL_NEGATIVE} ${echo_cyan}$filename"
+        else
+            for filepath in $DOTFILES/$source_type/available/linux/*.bash; do
+                filename="$(basename $filepath)"
+                [[ -f $filepath ]] && _df_enable_item "$source_type" "linux/$filename"
             done
-            break
-            ;;
-        *)
-            echo -e "${echo_bold_red}Error! Please enter 'Y' or 'N'.${echo_reset_color}"
-    esac
-
-    # Cleanup
-    unset $source_file
-    unset $answer
-    unset $dest
-  done
+        fi
+    fi
 done
 
-while true; do
-    echo ""
-    echo -en "${echo_yellow}Install rc-files? ${COLORED_YESNO}"
-    read -p " " answer
-    case $answer in
-        [yY])
-            for source_file in $DOTFILES/resources/rc-files/.*; do
-                if [[ -f $source_file ]]; then
-                    filename="$(basename $source_file)"
-                    if [ $BACKUP_FILES == 1 ] && [ -f $HOME/$filename ]; then
-                        cp -R $HOME/$filename $HOME/$filename_$BACKUP_TIME
-                    fi
-                    ln -sF $DOTFILES/resources/rc-files/$filename $HOME/$filename
-                    echo -e " ${echo_green}${SYMBOL_POSITIVE} ${echo_cyan}$filename${echo_reset_color}"
-                fi
-            done
-            break
-            ;;
-        [nN])
-            for source_file in $DOTFILES/resources/rc-files/.*; do
-                if [[ -f $source_file ]]; then
-                    filename="$(basename $source_file)"
-                    echo -e " ${echo_red}${SYMBOL_NEGATIVE} ${echo_cyan}$filename"
-                fi
-            done
-            break
-            ;;
-        *)
-            echo -e "${echo_bold_red}Error! Please enter 'Y' or 'N'.${echo_reset_color}"
-    esac
-done
+cd
 
-while true; do
-    echo ""
-    echo -en "${echo_yellow}Install Git related files? ${COLORED_YESNO}"
-    read -p " " answer
-    case $answer in
-        [yY])
-            for source_file in $DOTFILES/resources/.git*; do
-                if [[ -f $source_file ]]; then
-                    filename="$(basename $source_file)"
-                    if [ $BACKUP_FILES == 1 ] && [ -f $HOME/$filename ]; then
-                        cp -R $HOME/$filename $HOME/$filename_$BACKUP_TIME
-                    fi
-                    if [ $filename == '.gitconfig' ]; then
-                        cp -R $DOTFILES/resources/$filename $HOME/$filename
-                    else
-                        ln -sF $DOTFILES/resources/$filename $HOME/$filename
-                    fi
-                    echo -e " ${echo_green}${SYMBOL_POSITIVE} ${echo_cyan}$filename${echo_reset_color}"
-                fi
-            done
-            break
-            ;;
-        [nN])
-            for source_file in $DOTFILES/resources/.git*; do
-                if [[ -f $source_file ]]; then
-                    filename="$(basename $source_file)"
-                    echo -e " ${echo_red}${SYMBOL_NEGATIVE} ${echo_cyan}$filename"
-                fi
-            done
-            break
-            ;;
-        *)
-            echo -e "${echo_bold_red}Error! Please enter 'Y' or 'N'.${echo_reset_color}"
-    esac
-done
+# rc-files
+echo ""
+echo -en "${echo_yellow}Install rc-files?${echo_reset_color}"
+if ask "" Y; then
+    for filepath in $DOTFILES/rc-files/.*; do
+        [[ -f $filepath ]] && _df_install_to_home "$filepath"
+    done
+    if [[ is_mac ]]; then
+        for filepath in $DOTFILES/rc-files/osx/.*; do
+            [[ -f $filepath ]] && _df_install_to_home "$filepath"
+        done
+    else
+        for filepath in $DOTFILES/rc-files/linux/.*; do
+            [[ -f $filepath ]] && _df_install_to_home "$filepath"
+        done
+    fi
+fi
+
+# Git files
+echo ""
+echo -en "${echo_yellow}Install Git related files?${echo_reset_color}"
+if ask "" Y; then
+    for filepath in $DOTFILES/resources/.git*; do
+        filename="$(basename $filepath)"
+        if [[ $filename == '.gitconfig' ]]; then
+            cp -R "$filepath" .
+        else
+            _df_install_to_home "$filepath"
+        fi
+    done
+fi
 
 echo ""
-echo -e "${echo_green}Done!${echo_reset_color}"
+echo -e "${echo_green}Done! ${echo_reset_color}"
 echo ""

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+[[ $DF_DEBUG ]] && echo -e "\033[1;32mAlias Loaded:\033[39m $(basename ${BASH_SOURCE[0]})"
+
 alias preview="open -a '$PREVIEW'"
 alias safari="open -a safari"
 alias firefox="open -a firefox"

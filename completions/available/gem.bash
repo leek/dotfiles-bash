@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Completion for gem
+
+[[ $DF_DEBUG ]] && echo -e "\033[1;32mCompletion Loaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 
 _installcomp() {
-  if [ -z "$REMOTE_GEMS" ]
-  then
+  if [ -z "$REMOTE_GEMS" ]; then
     REMOTE_GEMS=( $(gem list --remote --no-versions | tr '\n' ' ') )
   fi
 
@@ -12,8 +12,7 @@ _installcomp() {
 }
 
 _uninstallcomp() {
-  if [ -z "$LOCAL_GEMS" ]
-  then
+  if [ -z "$LOCAL_GEMS" ]; then
     LOCAL_GEMS=( $(gem list --no-versions | sed 's/\*\*\* LOCAL GEMS \*\*\*//' | tr '\n' ' ') )
   fi
 

@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
+[[ $DF_DEBUG ]] && echo -e "\033[1;32mFunction Loaded:\033[39m $(basename ${BASH_SOURCE[0]})"
+
 extract () {
-  if [ $# -ne 1 ]
-  then
-    echo "Error: No file specified."
-    return 1
-  fi
+    if [ $# -ne 1 ]; then
+        echo "Error: No file specified."
+        return 1
+    fi
     if [ -f $1 ] ; then
         case $1 in
             *.tar.bz2) tar xvjf $1   ;;
