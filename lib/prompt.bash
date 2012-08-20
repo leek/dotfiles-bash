@@ -56,6 +56,7 @@ function prompt_status() {
 }
 
 function prompt_command() {
+    echo -ne "\033]0;$SHORT_USER@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007"
     PS1="$(prompt_status)${bold_black}$SHORT_USER@\\h ${blue}\\w $(git_prompt)${purple}\\$ ${reset_color}"
 }
 
