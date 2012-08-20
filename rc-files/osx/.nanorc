@@ -273,7 +273,7 @@ color magenta   "&(#[0-9]+|[A-Za-z]+);"
 color cyan  start="<!--" end="-->"
 color cyan  "<!(doctype|DOCTYPE)[^>]*>"
 color ,green "\s+$"ncolor ,red "t*"
-syntax "ini" "\.(desktop|ini|override|repo)$" "gitconfig$"
+syntax "ini" "\.(desktop|ini|override|repo|gitconfig)$"
 
 color red "[=;]" "\[" "\]"
 color green  "\<(true|false)\>"

@@ -59,4 +59,4 @@ function prompt_command() {
     PS1="$(prompt_status)${bold_black}$SHORT_USER@\\h ${blue}\\w $(git_prompt)${purple}\\$ ${reset_color}"
 }
 
-PROMPT_COMMAND=prompt_command;
+PROMPT_COMMAND="${PROMPT_COMMAND} prompt_command"

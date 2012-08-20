@@ -56,8 +56,8 @@ for custom_file in $DOTFILES/custom/*.bash; do
     [[ -x $DOTFILES/custom/$custom_file ]] && source $DOTFILES/custom/$custom_file
 done
 
-if [[ $PROMPT ]]; then
-    export PS1=$PROMPT
-fi
-
 [[ -e $DOTFILES/custom/after.bash ]] && source $DOTFILES/custom/after.bash
+
+if [[ $DF_DEBUG ]]; then
+    echo ""
+fi

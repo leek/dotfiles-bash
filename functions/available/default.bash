@@ -23,10 +23,6 @@ lsgrep () {
     ls | grep "$*"
 }
 
-psgrep () {
-    ps aux | grep "$*"
-}
-
 pman () {
     man -t "${1}" | open -f -a $PREVIEW
 }

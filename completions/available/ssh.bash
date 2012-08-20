@@ -17,3 +17,4 @@ _sshcomplete() {
 }
 
 complete -o default -o nospace -F _sshcomplete ssh
+complete -o default -o nospace -F _sshcomplete ssh-copy-id

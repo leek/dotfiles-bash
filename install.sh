@@ -33,7 +33,7 @@ function _df_echo_file_status() {
     elif [[ $1 == 'NEGATIVE' ]]; then
         echo -e " ${echo_red}${SYMBOL_NEGATIVE} ${echo_cyan}$filename $reason${echo_reset_color}"
     else
-        echo -e " ${echo_white}${SYMBOL_NEUTRAL} ${echo_cyan}$filename $reason${echo_reset_color}"
+        echo -e " ${echo_bold_black}${SYMBOL_NEUTRAL} ${echo_cyan}$filename $reason${echo_reset_color}"
     fi
 }
 
@@ -44,17 +44,17 @@ function _df_make_backup() {
     echo ""
     echo -e "Backing up ${echo_bold_white}$filename${echo_reset_color}..."
     if [[ -e $filepath_backup ]]; then
-        _df_echo_file_status "NEGATIVE" "$filepath_backup" ": Backup already exists..."
+        _df_echo_file_status "NEGATIVE" "$filepath_backup"
     else
         if [[ -e $filepath ]]; then
             cp -R "$filepath" "$filepath_backup"
             if [[ -e $filepath_backup ]]; then
                 _df_echo_file_status "POSITIVE" "$filename"
             else
-                _df_echo_file_status "NEGATIVE" "$filepath_backup" ": Failed"
+                _df_echo_file_status "NEGATIVE" "$filepath_backup"
             fi
         else
-            _df_echo_file_status "NEUTRAL" "$filename" ": Skipped..."
+            _df_echo_file_status "NEUTRAL" "$filename"
         fi
     fi
 }
@@ -62,20 +62,24 @@ function _df_make_backup() {
 function _df_install_to_home() {
     local filepath=$1
     local filename="$(basename $filepath)"
-    if [[ $CREATE_LINKS == 1 ]]; then
-        ln -sF "$filepath"
-        if [[ -L $filename ]]; then
-            _df_echo_file_status "POSITIVE" "$filename"
+    if [[ ! -e $filepath ]]; then
+        if [[ $CREATE_LINKS == 1 ]]; then
+            ln -sF "$filepath"
+            if [[ -L $filename ]]; then
+                _df_echo_file_status "POSITIVE" "$filename"
+            else
+                _df_echo_file_status "NEGATIVE" "$filename"
+            fi
         else
-            _df_echo_file_status "NEGATIVE" "$filename" ": Failed"
+            cp -R "$filepath" .
+            if [[ -e $filename ]]; then
+                _df_echo_file_status "POSITIVE" "$filename"
+            else
+                _df_echo_file_status "NEGATIVE" "$filename"
+            fi
         fi
     else
-        cp -R "$filepath" .
-        if [[ -e $filename ]]; then
-            _df_echo_file_status "POSITIVE" "$filename"
-        else
-            _df_echo_file_status "NEGATIVE" "$filename" ": Failed"
-        fi
+        _df_echo_file_status "NEUTRAL" "$filename"
     fi
 }
 
@@ -88,10 +92,10 @@ function _df_enable_item() {
         if [[ -L $enabledpath ]]; then
             _df_echo_file_status "POSITIVE" "$filename"
         else
-            _df_echo_file_status "NEGATIVE" "$filename" ": Failed"
+            _df_echo_file_status "NEGATIVE" "$filename"
         fi
     else
-        _df_echo_file_status "NEUTRAL" "$filename" ": Skipped..."
+        _df_echo_file_status "NEUTRAL" "$filename"
     fi
 }
 
@@ -106,7 +110,7 @@ if ask "" N; then
     df_make_backup ".bash_profile"
 else
     BACKUP_FILES=0
-    _df_echo_file_status "NEUTRAL" ".bash_profile" ": Skipped..."
+    _df_echo_file_status "NEUTRAL" ".bash_profile"
 fi
 
 echo ""
@@ -171,9 +175,35 @@ if ask "" Y; then
     for filepath in $DOTFILES/resources/.git*; do
         filename="$(basename $filepath)"
         if [[ $filename == '.gitconfig' ]]; then
-            cp -R "$filepath" .
+            if [[ ! -e $filepath ]]; then
+                cp -R "$filepath" .
+            else
+                _df_echo_file_status "NEUTRAL" "${filename}"
+            fi
         else
             _df_install_to_home "$filepath"
+        fi
+    done
+fi
+
+# Scripts/Binaries
+echo ""
+echo -en "${echo_yellow}Install commands/scripts?${echo_reset_color}"
+if ask "" Y; then
+    sourcepath=$DOTFILES/resources/scripts
+    destpath=/usr/local/bin
+    for current in "ssh-copy-id" "service" "magento"; do
+        if [[ -e "${sourcepath}/${current}.sh" ]]; then
+            if [[ ! -x "$(which ${current})" ]]; then
+                ln -s "${sourcepath}/${current}.sh" "${destpath}/${current}" && chmod +x "${destpath}/${current}"
+                if [[ -x "${destpath}/${current}" ]]; then
+                    _df_echo_file_status "POSITIVE" "${current}"
+                else
+                    _df_echo_file_status "NEGATIVE" "${current}"
+                fi
+            else
+                _df_echo_file_status "NEUTRAL" "${current}"
+            fi
         fi
     done
 fi
