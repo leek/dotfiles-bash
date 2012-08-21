@@ -55,9 +55,12 @@ function prompt_status() {
     fi
 }
 
+function update_title() {
+    PS1="$PS1\$(echo -n -e \"\033]0;$SHORT_USER@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007\")"
+}
+
 function prompt_command() {
-    echo -ne "\033]0;$SHORT_USER@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007"
     PS1="$(prompt_status)${bold_black}$SHORT_USER@\\h ${blue}\\w $(git_prompt)${purple}\\$ ${reset_color}"
 }
 
-PROMPT_COMMAND="${PROMPT_COMMAND} prompt_command"
+PROMPT_COMMAND="$PROMPT_COMMAND prompt_command; update_title"

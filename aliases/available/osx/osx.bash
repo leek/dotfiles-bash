@@ -13,4 +13,7 @@ alias fh='open -a Finder .'
 type -t md5sum > /dev/null || alias md5sum="md5"
 
 # Recursively delete `.DS_Store` files
-alias cleanup="find . -name '*.DS_Store' -type f -ls -delete"
+alias clean-ds_store="find . -name '*.DS_Store' -type f -ls -delete"
+
+# Speed up Terminal.app
+alias clean-asl="sudo rm -rf /private/var/log/asl/*.asl"

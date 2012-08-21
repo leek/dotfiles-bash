@@ -9,3 +9,7 @@ magento-event-ls() {
 magento-mysqldump() {
     mysqldump --ignore-table="${1}.log_customer" --ignore-table="${1}.log_quote" --ignore-table="${1}.log_summary" –-ignore-table="${1}.log_summary_type" –-ignore-table="${1}.log_url" --ignore-table="${1}.log_url_info" --ignore-table="${1}.log_visitor" --ignore-table="${1}.log_visitor_info" --ignore-table="${1}.log_visitor_online" –-ignore-table="${1}.log_summary" –-ignore-table="${1}.enterprise_logging_event" –-ignore-table="${1}.enterprise_logging_event_changes"
 }
+
+magento-install-gitignore() {
+    wget https://raw.github.com/github/gitignore/master/Magento.gitignore && mv Magento.gitignore .gitignore
+}
