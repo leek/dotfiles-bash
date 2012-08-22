@@ -139,7 +139,7 @@ for source_type in "aliases" "completions" "functions"; do
                 filename="$(basename $filepath)"
                 [[ -f $filepath ]] && _df_enable_item "$source_type" "osx/$filename"
             done
-        else
+        elif [[ is_linux ]]; then
             for filepath in $DOTFILES/$source_type/available/linux/*.bash; do
                 filename="$(basename $filepath)"
                 [[ -f $filepath ]] && _df_enable_item "$source_type" "linux/$filename"
@@ -157,17 +157,17 @@ if ask "" Y; then
     for filepath in $DOTFILES/rc-files/.*; do
         filename="$(basename $filepath)"
         if [[ $filename == ".gemrc" ]]; then
-            if [[ -x "$(which gem)" ]]; then
+            if [[ ! -x "$(which gem)" ]]; then
                 _df_echo_file_status $NEUTRAL "${filename}"
                 continue
             fi
         elif [[ $filename == ".npmrc" ]]; then
-            if [[ -x "$(which npm)" ]]; then
+            if [[ ! -x "$(which npm)" ]]; then
                 _df_echo_file_status $NEUTRAL "${filename}"
                 continue
             fi
         elif [[ $filename == ".mongorc.js" ]]; then
-            if [[ -x "$(which mongo)" ]]; then
+            if [[ ! -x "$(which mongo)" ]]; then
                 _df_echo_file_status $NEUTRAL "${filename}"
                 continue
             fi

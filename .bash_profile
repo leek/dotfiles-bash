@@ -38,12 +38,15 @@ unset MAILCHECK
 
 source $DOTFILES/lib/core.bash
 source $DOTFILES/lib/colors.bash
-source $DOTFILES/lib/prompt.bash
 source $DOTFILES/lib/history.bash
 source $DOTFILES/lib/colorful.bash
 
-[[ is_mac ]] && source $DOTFILES/lib/osx.bash
-[[ is_linux ]] && source $DOTFILES/lib/linux.bash
+if [[ is_mac ]]; then
+    source $DOTFILES/lib/prompt.bash
+    source $DOTFILES/lib/osx.bash
+elif [[ is_linux ]]; then
+    source $DOTFILES/lib/linux.bash
+fi
 
 # Load enabled types
 for item_type in "${DF_ITEM_TYPES[@]}"; do

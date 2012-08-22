@@ -2,3 +2,4 @@ custom/*
 aliases/enabled/*
 completions/enabled/*
 functions/enabled/*
+.bash_prompt
