@@ -1,17 +1,6 @@
 #!/bin/bash -e
 cd
 
-[ -d .dotfiles ] || git clone git://github.com/leek/dotfiles.git .dotfiles
-(
-    set -e
-    cd .dotfiles
-
-    TEMPFILE="`mktemp -t install.XXXXXX`"
-    trap '{ rm -f "$TEMPFILE"; }' EXIT
-)
-
-cd
-
 CURRENT=`pwd`
 DOTFILES="${CURRENT}/.dotfiles"
 BACKUP_TIME="$(date +%Y%m%d_%H%M%S)"
@@ -166,15 +155,41 @@ echo ""
 echo -en "${echo_yellow}Install rc-files?${echo_reset_color}"
 if ask "" Y; then
     for filepath in $DOTFILES/rc-files/.*; do
-        [[ -f $filepath ]] && _df_install_to_home "$filepath"
+        filename="$(basename $filepath)"
+        case $filename in
+            ".gemrc"    )
+                if [[ ! -x "$(which gem)" ]]; then
+                    _df_install_to_home "$filepath"
+                else
+                    _df_echo_file_status $NEUTRAL "${filename}"
+                fi
+                ;;
+            ".npmrc"    )
+                if [[ ! -x "$(which npm)" ]]; then
+                    _df_install_to_home "$filepath"
+                else
+                    _df_echo_file_status $NEUTRAL "${filename}"
+                fi
+                ;;
+            ".mongorc.js"    )
+                if [[ ! -x "$(which mongo)" ]]; then
+                    _df_install_to_home "$filepath"
+                else
+                    _df_echo_file_status $NEUTRAL "${filename}"
+                fi
+                ;;
+            *           )
+                _df_install_to_home "$filepath"
+                ;;
+        esac
     done
     if [[ is_mac ]]; then
         for filepath in $DOTFILES/rc-files/osx/.*; do
-            [[ -f $filepath ]] && _df_install_to_home "$filepath"
+            _df_install_to_home "$filepath"
         done
-    else
+    elif [[ is_linux ]]; then
         for filepath in $DOTFILES/rc-files/linux/.*; do
-            [[ -f $filepath ]] && _df_install_to_home "$filepath"
+            _df_install_to_home "$filepath"
         done
     fi
 fi

@@ -8,4 +8,5 @@
 * [grosser](https://github.com/grosser/dotfiles)
 
 ## Installation
-    bash < <( curl -sL http://github.com/leek/dotfiles/raw/master/install.sh )
+
+    cd ~/ && git clone git://github.com/leek/dotfiles.git .dotfiles && ./.dotfiles/install.sh
