@@ -41,8 +41,12 @@ source $DOTFILES/lib/colors.bash
 source $DOTFILES/lib/history.bash
 source $DOTFILES/lib/colorful.bash
 
-if [[ is_mac ]]; then
+if [[ -e $DOTFILES/.bash_prompt ]]; then
     source $DOTFILES/lib/prompt.bash
+    source $DOTFILES/.bash_prompt
+fi
+
+if [[ is_mac ]]; then
     source $DOTFILES/lib/osx.bash
 elif [[ is_linux ]]; then
     source $DOTFILES/lib/linux.bash

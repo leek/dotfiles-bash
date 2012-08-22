@@ -49,18 +49,12 @@ function git_prompt {
 
 function prompt_status() {
     if [ $? = 0 ]; then
-        echo -en "${green}${SYMBOL_POSITIVE} ";
+        echo -en "${green}${SYMBOL_POSITIVE} ${reset_color}";
     else
-        echo -en "${red}${SYMBOL_NEGATIVE} ";
+        echo -en "${red}${SYMBOL_NEGATIVE} ${reset_color}";
     fi
 }
 
 function update_title() {
     PS1="$PS1\$(echo -n -e \"\033]0;$SHORT_USER@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007\")"
 }
-
-function prompt_command() {
-    PS1="$(prompt_status)${bold_black}$SHORT_USER@\\h ${blue}\\w $(git_prompt)${purple}\\$ ${reset_color}"
-}
-
-PROMPT_COMMAND="$PROMPT_COMMAND prompt_command; update_title"
