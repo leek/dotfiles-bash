@@ -156,40 +156,31 @@ echo -en "${echo_yellow}Install rc-files?${echo_reset_color}"
 if ask "" Y; then
     for filepath in $DOTFILES/rc-files/.*; do
         filename="$(basename $filepath)"
-        case $filename in
-            ".gemrc"    )
-                if [[ ! -x "$(which gem)" ]]; then
-                    _df_install_to_home "$filepath"
-                else
-                    _df_echo_file_status $NEUTRAL "${filename}"
-                fi
-                ;;
-            ".npmrc"    )
-                if [[ ! -x "$(which npm)" ]]; then
-                    _df_install_to_home "$filepath"
-                else
-                    _df_echo_file_status $NEUTRAL "${filename}"
-                fi
-                ;;
-            ".mongorc.js"    )
-                if [[ ! -x "$(which mongo)" ]]; then
-                    _df_install_to_home "$filepath"
-                else
-                    _df_echo_file_status $NEUTRAL "${filename}"
-                fi
-                ;;
-            *           )
-                _df_install_to_home "$filepath"
-                ;;
-        esac
+        if [[ $filename == ".gemrc" ]]; then
+            if [[ -x "$(which gem)" ]]; then
+                _df_echo_file_status $NEUTRAL "${filename}"
+                continue
+            fi
+        elif [[ $filename == ".npmrc" ]]; then
+            if [[ -x "$(which npm)" ]]; then
+                _df_echo_file_status $NEUTRAL "${filename}"
+                continue
+            fi
+        elif [[ $filename == ".mongorc.js" ]]; then
+            if [[ -x "$(which mongo)" ]]; then
+                _df_echo_file_status $NEUTRAL "${filename}"
+                continue
+            fi
+        fi
+        [[ -f $filepath ]] && _df_install_to_home "$filepath"
     done
     if [[ is_mac ]]; then
         for filepath in $DOTFILES/rc-files/osx/.*; do
-            _df_install_to_home "$filepath"
+            [[ -f $filepath ]] && _df_install_to_home "$filepath"
         done
     elif [[ is_linux ]]; then
         for filepath in $DOTFILES/rc-files/linux/.*; do
-            _df_install_to_home "$filepath"
+            [[ -f $filepath ]] && _df_install_to_home "$filepath"
         done
     fi
 fi
