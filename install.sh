@@ -15,6 +15,10 @@ cd
 CURRENT=`pwd`
 DOTFILES="${CURRENT}/.dotfiles"
 BACKUP_TIME="$(date +%Y%m%d_%H%M%S)"
+POSITIVE=0
+NEGATIVE=1
+NEUTRAL=2
+
 
 # So we have colors available
 source $DOTFILES/lib/colors.bash
@@ -27,76 +31,85 @@ source $DOTFILES/functions/available/default.bash
 
 function _df_echo_file_status() {
     local filename="$(basename $2)"
-    local reason=${3:-}
-    if [[ $1 == 'POSITIVE' ]]; then
-        echo -e " ${echo_green}${SYMBOL_POSITIVE} ${echo_cyan}$filename $reason${echo_reset_color}"
-    elif [[ $1 == 'NEGATIVE' ]]; then
-        echo -e " ${echo_red}${SYMBOL_NEGATIVE} ${echo_cyan}$filename $reason${echo_reset_color}"
-    else
-        echo -e " ${echo_bold_black}${SYMBOL_NEUTRAL} ${echo_cyan}$filename $reason${echo_reset_color}"
+    local message=${3:-}
+    if [[ $1 == $POSITIVE ]]; then
+        echo -e " ${echo_green}${SYMBOL_POSITIVE} ${echo_cyan}$filename $message${echo_reset_color}"
+    elif [[ $1 == $NEGATIVE ]]; then
+        echo -e " ${echo_red}${SYMBOL_NEGATIVE} ${echo_cyan}$filename $message${echo_reset_color}"
+    elif [[ $1 == $NEUTRAL ]]; then
+        echo -e " ${echo_bold_black}${SYMBOL_NEUTRAL} ${echo_cyan}$filename $message${echo_reset_color}"
     fi
 }
+
+    # echo ""
+    # echo -e "Backing up ${echo_bold_white}$filename${echo_reset_color}..."
 
 function _df_make_backup() {
     local filepath=$1
     local filename="$(basename $filepath)"
     local filepath_backup="${filepath}_${BACKUP_TIME}"
-    echo ""
-    echo -e "Backing up ${echo_bold_white}$filename${echo_reset_color}..."
-    if [[ -e $filepath_backup ]]; then
-        _df_echo_file_status "NEGATIVE" "$filepath_backup"
-    else
+    if [[ ! -e $filepath_backup ]]; then
         if [[ -e $filepath ]]; then
             cp -R "$filepath" "$filepath_backup"
             if [[ -e $filepath_backup ]]; then
-                _df_echo_file_status "POSITIVE" "$filename"
-            else
-                _df_echo_file_status "NEGATIVE" "$filepath_backup"
+                _df_echo_file_status $POSITIVE $filepath
+                return
             fi
         else
-            _df_echo_file_status "NEUTRAL" "$filename"
+            _df_echo_file_status $NEUTRAL $filepath
+            return
         fi
     fi
+    _df_echo_file_status $NEGATIVE $filepath
 }
 
 function _df_install_to_home() {
     local filepath=$1
     local filename="$(basename $filepath)"
-    if [[ ! -e $filepath ]]; then
-        if [[ $CREATE_LINKS == 1 ]]; then
-            ln -sF "$filepath"
-            if [[ -L $filename ]]; then
-                _df_echo_file_status "POSITIVE" "$filename"
+    if [[ -e $filepath ]]; then
+        if [[ -e "$HOME/$filename" ]]; then
+            if [[ -L "$HOME/$filename" ]]; then
+                _df_echo_file_status $NEUTRAL $filepath
+                return
             else
-                _df_echo_file_status "NEGATIVE" "$filename"
-            fi
-        else
-            cp -R "$filepath" .
-            if [[ -e $filename ]]; then
-                _df_echo_file_status "POSITIVE" "$filename"
-            else
-                _df_echo_file_status "NEGATIVE" "$filename"
+                if [[ $BACKUP_FILES == 1 ]]; then
+                    _df_make_backup ".bash_profile"
+                fi
             fi
         fi
-    else
-        _df_echo_file_status "NEUTRAL" "$filename"
+        if [[ $CREATE_LINKS == 1 ]]; then
+            (cd $HOME && ln -sF "$filepath")
+            if [[ -L "$HOME/$filename" ]]; then
+                _df_echo_file_status $POSITIVE $filepath
+                return
+            fi
+        else
+            cp -R "$filepath" $HOME
+            if [[ -e "$HOME/$filename" ]]; then
+                _df_echo_file_status $POSITIVE $filepath
+                return
+            fi
+        fi
     fi
+    _df_echo_file_status $NEGATIVE $filepath
 }
 
 function _df_enable_item() {
     local filename="$(basename $2)"
     local enabledpath="$DOTFILES/$1/enabled/$filename"
     local availpath="$DOTFILES/$1/available/$2"
-    if [[ ! -e $enabledpath ]] && [[ -e $availpath ]]; then
+    if [[ -e $availpath ]]; then
+        if [[ -e $enabledpath ]]; then
+            _df_echo_file_status $NEUTRAL $filepath
+            return
+        fi
         ln -sF "$availpath" "$enabledpath"
         if [[ -L $enabledpath ]]; then
-            _df_echo_file_status "POSITIVE" "$filename"
-        else
-            _df_echo_file_status "NEGATIVE" "$filename"
+            _df_echo_file_status $POSITIVE $filepath
+            return
         fi
-    else
-        _df_echo_file_status "NEUTRAL" "$filename"
     fi
+    _df_echo_file_status $NEGATIVE $filepath
 }
 
 #
@@ -107,10 +120,8 @@ echo ""
 echo -en "${echo_yellow}Make backups if file(s) already exist?${echo_reset_color}"
 if ask "" N; then
     BACKUP_FILES=1
-    df_make_backup ".bash_profile"
 else
     BACKUP_FILES=0
-    _df_echo_file_status "NEUTRAL" ".bash_profile"
 fi
 
 echo ""
@@ -178,7 +189,7 @@ if ask "" Y; then
             if [[ ! -e $filepath ]]; then
                 cp -R "$filepath" .
             else
-                _df_echo_file_status "NEUTRAL" "${filename}"
+                _df_echo_file_status $NEUTRAL "${filename}"
             fi
         else
             _df_install_to_home "$filepath"
@@ -197,12 +208,12 @@ if ask "" Y; then
             if [[ ! -x "$(which ${current})" ]]; then
                 ln -s "${sourcepath}/${current}.sh" "${destpath}/${current}" && chmod +x "${destpath}/${current}"
                 if [[ -x "${destpath}/${current}" ]]; then
-                    _df_echo_file_status "POSITIVE" "${current}"
+                    _df_echo_file_status $POSITIVE "${current}"
                 else
-                    _df_echo_file_status "NEGATIVE" "${current}"
+                    _df_echo_file_status $NEGATIVE "${current}"
                 fi
             else
-                _df_echo_file_status "NEUTRAL" "${current}"
+                _df_echo_file_status $NEUTRAL "${current}"
             fi
         fi
     done

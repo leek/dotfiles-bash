@@ -40,3 +40,7 @@ Thumbs.db
 # Files that might appear on external disks
 .Spotlight-V100
 .Trashes
+
+# Bash Completion cache files
+.cache_console
+.cache_cap_t
