@@ -66,9 +66,9 @@ if [[ -e $DOTFILES/.bash_prompt ]]; then
     source $DOTFILES/.bash_prompt
 fi
 
-if [[ is_mac ]]; then
+if [[ $UNAME == "Darwin" ]]; then
     source $DOTFILES/lib/osx.bash
-elif [[ is_linux ]]; then
+elif [[ $UNAME == "Linux" ]]; then
     source $DOTFILES/lib/linux.bash
 fi
 
