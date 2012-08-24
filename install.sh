@@ -1,6 +1,7 @@
 #!/bin/bash -e
 cd
 
+UNAME=$(uname)
 DOTFILES="$HOME/dotfiles"
 BACKUP_TIME="$(date +%Y%m%d_%H%M%S)"
 POSITIVE=0
@@ -134,12 +135,12 @@ for source_type in "aliases" "completions" "functions"; do
             filename="$(basename $filepath)"
             [[ -f $filepath ]] && _df_enable_item "$source_type" "$filename"
         done
-        if [[ is_mac ]]; then
+        if [[ $UNAME == "Darwin" ]]; then
             for filepath in $DOTFILES/$source_type/available/osx/*.bash; do
                 filename="$(basename $filepath)"
                 [[ -f $filepath ]] && _df_enable_item "$source_type" "osx/$filename"
             done
-        elif [[ is_linux ]]; then
+        elif [[ $UNAME == "Linux" ]]; then
             for filepath in $DOTFILES/$source_type/available/linux/*.bash; do
                 filename="$(basename $filepath)"
                 [[ -f $filepath ]] && _df_enable_item "$source_type" "linux/$filename"
@@ -174,11 +175,11 @@ if ask "" Y; then
         fi
         [[ -f $filepath ]] && _df_install_to_home "$filepath"
     done
-    if [[ is_mac ]]; then
+    if [[ $UNAME == "Darwin" ]]; then
         for filepath in $DOTFILES/rc-files/osx/.*; do
             [[ -f $filepath ]] && _df_install_to_home "$filepath"
         done
-    elif [[ is_linux ]]; then
+    elif [[ $UNAME == "Linux" ]]; then
         for filepath in $DOTFILES/rc-files/linux/.*; do
             [[ -f $filepath ]] && _df_install_to_home "$filepath"
         done
