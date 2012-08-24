@@ -17,7 +17,6 @@ path_unshift() {
 DOTFILES="$HOME/dotfiles"
 SHORT_USER="$USER"
 UNAME=$(uname)
-DF_ITEM_TYPES=( aliases completions functions )
 DF_CUSTOM_EXCLUDE=( before.bash after.bash )
 
 if [[ $DF_DEBUG ]]; then
@@ -73,7 +72,7 @@ elif [[ $UNAME == "Linux" ]]; then
 fi
 
 # Load enabled types
-for item_type in "${DF_ITEM_TYPES[@]}"; do
+for item_type in "aliases" "completions" "functions"; do
     _df_load_enabled_by_type $item_type
 done
 
