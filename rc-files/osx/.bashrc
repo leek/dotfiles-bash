@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Personal .bashrc file for interactive bash(1) shells.
 
-# Don't continue if this is being sourced from a non-interactive shell
+# If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
 # DF_DEBUG=1
