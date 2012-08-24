@@ -1,13 +1,11 @@
 #!/bin/bash -e
 cd
 
-CURRENT=`pwd`
-DOTFILES="${CURRENT}/.dotfiles"
+DOTFILES="$HOME/dotfiles"
 BACKUP_TIME="$(date +%Y%m%d_%H%M%S)"
 POSITIVE=0
 NEGATIVE=1
 NEUTRAL=2
-
 
 # So we have colors available
 source $DOTFILES/lib/colors.bash
@@ -29,9 +27,6 @@ function _df_echo_file_status() {
         echo -e " ${echo_bold_black}${SYMBOL_NEUTRAL} ${echo_cyan}$filename $message${echo_reset_color}"
     fi
 }
-
-    # echo ""
-    # echo -e "Backing up ${echo_bold_white}$filename${echo_reset_color}..."
 
 function _df_make_backup() {
     local filepath=$1
@@ -121,6 +116,8 @@ else
     CREATE_LINKS=0
 fi
 
+_df_install_to_home "$DOTFILES/.bashrc"
+_df_install_to_home "$DOTFILES/.bash_aliases"
 _df_install_to_home "$DOTFILES/.bash_profile"
 
 # Aliases, Completions, and Functions
@@ -130,6 +127,7 @@ for source_type in "aliases" "completions" "functions"; do
     echo -en "${echo_yellow}Enable all ${echo_bold_yellow}${echo_underline_yellow}$source_type${echo_yellow}?${echo_reset_color}"
     if ask "" Y; then
         mkdir -p $DOTFILES/$source_type/enabled
+        rm -r $DOTFILES/$source_type/enabled/*
         for filepath in $DOTFILES/$source_type/available/*.bash; do
             filename="$(basename $filepath)"
             [[ -f $filepath ]] && _df_enable_item "$source_type" "$filename"
@@ -209,7 +207,7 @@ echo -en "${echo_yellow}Install commands/scripts?${echo_reset_color}"
 if ask "" Y; then
     sourcepath=$DOTFILES/resources/scripts
     destpath=/usr/local/bin
-    for current in "ssh-copy-id" "service" "magento"; do
+    for current in "ssh-copy-id" "service"; do
         if [[ -e "${sourcepath}/${current}.sh" ]]; then
             if [[ ! -x "$(which ${current})" ]]; then
                 ln -s "${sourcepath}/${current}.sh" "${destpath}/${current}" && chmod +x "${destpath}/${current}"

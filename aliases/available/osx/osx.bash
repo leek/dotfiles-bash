@@ -17,3 +17,7 @@ alias clean-ds_store="find . -name '*.DS_Store' -type f -ls -delete"
 
 # Speed up Terminal.app
 alias clean-asl="sudo rm -rf /private/var/log/asl/*.asl"
+
+# Default overrides
+alias ls="gls -GAFh --color=always"
+alias edit-ssh_config="${EDITOR} ~/.ssh/config"

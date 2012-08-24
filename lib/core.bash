@@ -1,24 +1,6 @@
 #!/usr/bin/env bash
 
-[[ $DF_DEBUG ]] && echo -e "\033[1;32mLoaded:\033[39m $(basename ${BASH_SOURCE[0]})"
-
-function is_mac() {
-    return [[ $UNAME == "Darwin" ]]
-}
-
-function is_linux() {
-    return [[ $UNAME == "Linux" ]]
-}
-
-# Usage: in_array "$needle" "${haystack[@]}"
-function in_array() {
-    local haystack needle=$1
-    shift
-    for haystack; do
-        [[ $haystack == $needle ]] && return 0
-    done
-    return 1
-}
+[[ $DF_DEBUG ]] && echo -e "\033[1;32m  Loaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 
 function _df_load_enabled_by_type() {
     local path="$DOTFILES/$1/enabled"

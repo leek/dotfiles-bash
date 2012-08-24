@@ -1,19 +1,24 @@
 #!/usr/bin/env bash
 
+DOTFILES="$HOME/dotfiles"
+SHORT_USER="$USER"
 UNAME=$(uname)
 DF_ITEM_TYPES=( aliases completions functions )
 DF_CUSTOM_EXCLUDE=( before.bash after.bash )
-# DF_DEBUG=1
 
 if [[ $DF_DEBUG ]]; then
-    echo ""
     echo -e "\033[1;32mLoaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 fi
 
-export PATH="~/bin:/usr/local/bin:/usr/local/sbin:$PATH"
-export SHORT_USER="$USER"
-export DOTFILES="$HOME/.dotfiles"
-export EDITOR='nano'
+export PATH="/usr/local/sbin:/usr/local/bin:$PATH"
+
+path_unshift "~/bin"
+path_push "/opt/local/bin"
+path_push "/opt/local/sbin"
+
+export EDITOR='nano -w'
+export GIT_EDITOR='nano -w'
+export LESSEDIT='nano -w'
 export FIGNORE="CVS:.DS_Store:.svn"
 export PAGER='less -SFX'
 export MAKEFLAGS='-j 3'
@@ -29,6 +34,7 @@ shopt -s nocaseglob
 shopt -s dotglob
 shopt -s cdspell
 shopt -s no_empty_cmd_completion
+shopt -s histappend
 
 # Unset options
 shopt -u mailwarn
@@ -64,7 +70,3 @@ for custom_file in $DOTFILES/custom/*.bash; do
 done
 
 [[ -e $DOTFILES/custom/after.bash ]] && source $DOTFILES/custom/after.bash
-
-if [[ $DF_DEBUG ]]; then
-    echo ""
-fi

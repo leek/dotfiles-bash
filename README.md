@@ -1,4 +1,4 @@
-# ~/.dotfiles
+# ~/dotfiles
 
 ## Compiled from various sources/authors
 
@@ -9,4 +9,8 @@
 
 ## Installation
 
-    cd ~/ && git clone git://github.com/leek/dotfiles.git .dotfiles && ./.dotfiles/install.sh
+    cd ~/ && git clone git://github.com/leek/dotfiles.git && ./dotfiles/install.sh
+
+## Extra
+
+Also looks for ~/.dotfiles which can contain private dotfiles or overrides

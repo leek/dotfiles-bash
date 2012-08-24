@@ -1,20 +1,23 @@
 #!/usr/bin/env bash
 
-[[ $DF_DEBUG ]] && echo -e "\033[1;32mLoaded:\033[39m $(basename ${BASH_SOURCE[0]})"
+[[ $DF_DEBUG ]] && echo -e "\033[1;32m  Loaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 
 export GEM_HOME="$HOME/.gem"
-export GEM_PATH="$HOME/.gem"
+export GEM_PATH="$GEM_HOME:/Library/Ruby/Gems/1.8"
 export RUBYOPT=rubygems
+
+mkdir -p "$GEM_HOME/bin" "$GEM_HOME/lib" "$GEM_HOME/src"
+path_unshift "$GEM_HOME/bin"
 
 # Editor defaults
 if [[ -x "`which subl`" ]]; then
-    export EDITOR='subl -w'
-    export GIT_EDITOR='subl -w'
-    export LESSEDIT='subl %f:%1m'
+    EDITOR='subl -w'
+    GIT_EDITOR='subl -w'
+    LESSEDIT='subl %f:%1m'
 elif [[ -x "`which mate`" ]]; then
-    export EDITOR='mate -w'
-    export GIT_EDITOR='mate -w'
-    export LESSEDIT='mate -l %lm %f'
+    EDITOR='mate -w'
+    GIT_EDITOR='mate -w'
+    LESSEDIT='mate -l %lm %f'
 fi
 
 # Load RVM into a shell session *as a function*

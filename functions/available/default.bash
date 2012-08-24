@@ -104,3 +104,21 @@ function ii()
     echo -e "\n${RED}Open connections :$NC "; netstat -pan --inet;
     echo
 }
+
+function is_mac() {
+    return [[ $UNAME == "Darwin" ]]
+}
+
+function is_linux() {
+    return [[ $UNAME == "Linux" ]]
+}
+
+# Usage: in_array "$needle" "${haystack[@]}"
+function in_array() {
+    local haystack needle=$1
+    shift
+    for haystack; do
+        [[ $haystack == $needle ]] && return 0
+    done
+    return 1
+}

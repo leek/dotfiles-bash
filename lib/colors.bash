@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-[[ $DF_DEBUG ]] && echo -e "\033[1;32mLoaded:\033[39m $(basename ${BASH_SOURCE[0]})"
+[[ $DF_DEBUG ]] && echo -e "\033[1;32m  Loaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 
 function color_test {
   T='test'
