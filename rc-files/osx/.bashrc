@@ -11,14 +11,6 @@ if [[ $DF_DEBUG ]]; then
     echo -e "\033[1;32mLoaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 fi
 
-if [ -f ~/.bash_aliases ]; then
-    source ~/.bash_aliases
-fi
-
 if [ -f ~/.bash_profile ]; then
     source ~/.bash_profile
-fi
-
-if [[ $DF_DEBUG ]]; then
-    echo ""
 fi

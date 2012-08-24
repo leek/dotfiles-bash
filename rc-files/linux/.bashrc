@@ -4,6 +4,13 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# DF_DEBUG=1
+
+if [[ $DF_DEBUG ]]; then
+    echo ""
+    echo -e "\033[1;32mLoaded:\033[39m $(basename ${BASH_SOURCE[0]})"
+fi
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -20,18 +27,3 @@ xterm*|rxvt*)
 *)
     ;;
 esac
-
-# DF_DEBUG=1
-
-if [[ $DF_DEBUG ]]; then
-    echo ""
-    echo -e "\033[1;32mLoaded:\033[39m $(basename ${BASH_SOURCE[0]})"
-fi
-
-if [ -f ~/.bash_aliases ]; then
-    source ~/.bash_aliases
-fi
-
-if [[ $DF_DEBUG ]]; then
-    echo ""
-fi
