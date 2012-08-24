@@ -119,7 +119,6 @@ else
     CREATE_LINKS=0
 fi
 
-_df_install_to_home "$DOTFILES/.bashrc"
 _df_install_to_home "$DOTFILES/.bash_aliases"
 _df_install_to_home "$DOTFILES/.bash_profile"
 
