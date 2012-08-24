@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+# Add to end of $PATH
+path_push() {
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH="$PATH:$1"
+    fi
+}
+
+# Prepend to beginning of $PATH
+path_unshift() {
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH="$1:$PATH"
+    fi
+}
+
 DOTFILES="$HOME/dotfiles"
 SHORT_USER="$USER"
 UNAME=$(uname)

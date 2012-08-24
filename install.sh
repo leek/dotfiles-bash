@@ -57,7 +57,10 @@ function _df_install_to_home() {
                 return
             else
                 if [[ $BACKUP_FILES == 1 ]]; then
-                    _df_make_backup ".bash_profile"
+                    _df_make_backup $filepath
+                else
+                    _df_echo_file_status $NEGATIVE $filepath
+                    return
                 fi
             fi
         fi
