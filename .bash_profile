@@ -1,34 +1,32 @@
 #!/usr/bin/env bash
-
-# Add to end of $PATH
-path_push() {
-    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
-        PATH="$PATH:$1"
-    fi
-}
-
-# Prepend to beginning of $PATH
-path_unshift() {
-    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
-        PATH="$1:$PATH"
-    fi
-}
-
-DOTFILES="$HOME/dotfiles"
-SHORT_USER="$USER"
-UNAME=$(uname)
-DF_CUSTOM_EXCLUDE=( before.bash after.bash )
+# Order (first one that exists):
+#   ~/.bash_profile
+#   ~/.bash_login
+#   ~/.profile
 
 if [[ $DF_DEBUG ]]; then
     echo -e "\033[1;32mLoaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 fi
 
-export PATH="/usr/local/sbin:/usr/local/bin:$PATH"
+# Local variables
+SHORT_USER="$USER"
+DOTFILES="$HOME/dotfiles"
 
-path_unshift "~/bin"
-path_push "/opt/local/bin"
-path_push "/opt/local/sbin"
+# PATH
+if [[ -d /usr/local/bin ]]; then
+    export PATH="/usr/local/bin:$PATH"
+fi
 
+if [[ -d /usr/local/sbin ]]; then
+    export PATH="/usr/local/sbin:$PATH"
+fi
+
+if [[ -d "$HOME/bin" ]]; then
+    export PATH="$HOME/bin:$PATH"
+fi
+
+# Exported variables
+export UNAME=$(uname)
 export EDITOR='nano -w'
 export GIT_EDITOR='nano -w'
 export LESSEDIT='nano -w'
@@ -39,19 +37,11 @@ export LC_ALL="en_US.UTF-8"
 export LANG="en_US"
 export LC_CTYPE="en_US.UTF-8"
 
+unset MAILCHECK
 set -o notify
 
-# Set options
-shopt -s checkwinsize
-shopt -s nocaseglob
-shopt -s dotglob
-shopt -s cdspell
-shopt -s no_empty_cmd_completion
-shopt -s histappend
-
-# Unset options
-shopt -u mailwarn
-unset MAILCHECK
+source $DOTFILES/lib/history.bash
+source $DOTFILES/lib/options.bash
 
 [[ -e $DOTFILES/custom/before.bash ]] && source $DOTFILES/custom/before.bash
 
@@ -77,9 +67,12 @@ for item_type in "aliases" "completions" "functions"; do
 done
 
 # Load all custom
-for custom_file in $DOTFILES/custom/*.bash; do
-    in_array "$custom_file" "${DF_CUSTOM_EXCLUDE[@]}" && continue
-    [[ -x $DOTFILES/custom/$custom_file ]] && source $DOTFILES/custom/$custom_file
+for filepath in $DOTFILES/custom/*.bash; do
+    filename="$(basename $filepath)"
+    if [[ $filename == 'after.bash' || $filename == 'before.bash' ]]; then
+        continue
+    fi
+    [[ -x $DOTFILES/custom/$filename ]] && source $DOTFILES/custom/$filename
 done
 
 [[ -e $DOTFILES/custom/after.bash ]] && source $DOTFILES/custom/after.bash

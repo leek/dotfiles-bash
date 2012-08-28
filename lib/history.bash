@@ -7,7 +7,3 @@ HISTSIZE=1000
 HISTFILESIZE=2000
 HISTIGNORE="&:ls:ls *:cd:cd -:pwd;exit:date:* --help *:mutt:[bf]g:exit"
 HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
-
-function rh {
-    history | awk '{a[$2]++}END{for(i in a){print a[i] " " i}}' | sort -rn | head
-}

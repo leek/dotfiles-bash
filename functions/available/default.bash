@@ -2,6 +2,10 @@
 
 [[ $DF_DEBUG ]] && echo -e "\033[1;32mFunction Loaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 
+function rh {
+    history | awk '{a[$2]++}END{for(i in a){print a[i] " " i}}' | sort -rn | head
+}
+
 ips () {
     ifconfig | grep "inet " | awk '{ print $2 }'
 }

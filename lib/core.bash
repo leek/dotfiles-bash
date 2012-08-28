@@ -2,6 +2,20 @@
 
 [[ $DF_DEBUG ]] && echo -e "\033[1;32m  Loaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 
+# Add to end of $PATH
+path_push() {
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH="$PATH:$1"
+    fi
+}
+
+# Prepend to beginning of $PATH
+path_unshift() {
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH="$1:$PATH"
+    fi
+}
+
 function _df_load_enabled_by_type() {
     local path="$DOTFILES/$1/enabled"
     if [[ -d $path ]]; then

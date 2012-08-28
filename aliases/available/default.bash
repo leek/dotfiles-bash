@@ -14,8 +14,6 @@ alias grep="grep --color=auto"
 alias timestamp='gawk "{now=strftime(\"%F %T \"); print now \$0; fflush(); }"'
 alias cls="clear"
 alias c="clear"
-alias s="subl"
-alias m="mate"
 alias top="top -o cpu"
 alias _="sudo"
 alias _!="sudo !!"

@@ -12,7 +12,7 @@ termcapinfo xtermc 'XT:AF=\E[3%p1%dm:AB=\E[4%p1%dm:AX:hs:ts=\E]2;:fs=\007:ds=\E]
 # Auto-screen Support (http://taint.org/wk/RemoteLoginAutoScreen)
 
 # Detach on hangup
-autodetach on
+# autodetach on
 
 # No startup msg
 startup_message off

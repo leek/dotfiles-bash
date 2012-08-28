@@ -7,7 +7,7 @@ export GEM_PATH="$GEM_HOME:/Library/Ruby/Gems/1.8"
 export RUBYOPT=rubygems
 
 mkdir -p "$GEM_HOME/bin" "$GEM_HOME/lib" "$GEM_HOME/src"
-path_unshift "$GEM_HOME/bin"
+export PATH="$GEM_HOME/bin:$PATH"
 
 # Editor defaults
 if [[ -x "`which subl`" ]]; then

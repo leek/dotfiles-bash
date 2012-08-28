@@ -106,7 +106,7 @@ function _df_enable_item() {
 
 echo ""
 echo -en "${echo_yellow}Make backups if file(s) already exist?${echo_reset_color}"
-if ask "" N; then
+if ask "" Y; then
     BACKUP_FILES=1
 else
     BACKUP_FILES=0
@@ -120,8 +120,8 @@ else
     CREATE_LINKS=0
 fi
 
-_df_install_to_home "$DOTFILES/.bash_aliases"
 _df_install_to_home "$DOTFILES/.bash_profile"
+_df_install_to_home "$DOTFILES/.bashrc"
 
 # Aliases, Completions, and Functions
 for source_type in "aliases" "completions" "functions"; do

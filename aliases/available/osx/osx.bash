@@ -2,6 +2,8 @@
 
 [[ $DF_DEBUG ]] && echo -e "\033[1;32mAlias Loaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 
+alias s="subl"
+alias m="mate"
 alias preview="open -a '$PREVIEW'"
 alias safari="open -a safari"
 alias firefox="open -a firefox"
@@ -20,4 +22,7 @@ alias clean-asl="sudo rm -rf /private/var/log/asl/*.asl"
 
 # Default overrides
 alias ls="gls -GAFh --color=always"
-alias edit-ssh_config="${EDITOR} ~/.ssh/config"
+
+# Quick edit
+alias open-sshconfig="${EDITOR} ~/.ssh/config"
+alias open-etchosts="${EDITOR} /etc/hosts"
