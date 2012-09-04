@@ -131,8 +131,8 @@ for source_type in "aliases" "completions" "functions"; do
     echo ""
     echo -en "${echo_yellow}Enable all ${echo_bold_yellow}${echo_underline_yellow}$source_type${echo_yellow}?${echo_reset_color}"
     if ask "" Y; then
+        rm -rf $DOTFILES/$source_type/enabled
         mkdir -p $DOTFILES/$source_type/enabled
-        rm -r $DOTFILES/$source_type/enabled/*
         for filepath in $DOTFILES/$source_type/available/*.bash; do
             filename="$(basename $filepath)"
             [[ -f $filepath ]] && _df_enable_item "$source_type" "$filename"
