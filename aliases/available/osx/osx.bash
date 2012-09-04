@@ -21,7 +21,11 @@ alias clean-ds_store="find . -name '*.DS_Store' -type f -ls -delete"
 alias clean-asl="sudo rm -rf /private/var/log/asl/*.asl"
 
 # Default overrides
-alias ls="gls -GAFh --color=always"
+if [[ -x "$(which gls)" ]]; then
+    alias ls="gls -AFh --color=auto"
+else
+    alias ls="gls -GAFh"
+fi
 
 # Quick edit
 alias open-sshconfig="${EDITOR} ~/.ssh/config"

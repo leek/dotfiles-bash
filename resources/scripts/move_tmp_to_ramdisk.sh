@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ ! `uname -s` == "Darwin" ]; then
+    echo "Error : This should only be used with Mac OS X" >&2
+    exit 1
+fi
+
 # +----------------------------------------------------------------------+
 # |                                                                      |
 # |  Set up Mac OS X to store temporary files in RAM rather than on disk.|

@@ -81,3 +81,7 @@ function df_disable_completion() {
 function df_disable_function() {
     _df_disable_item "functions" "$1"
 }
+
+function df_reload() {
+    source ~/.bash_profile
+}

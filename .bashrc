@@ -3,7 +3,7 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-if [ -f ~/.bash_profile ]; then
+if [ -r ~/.bash_profile ]; then
     source ~/.bash_profile
 fi
 

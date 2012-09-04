@@ -1,16 +1,6 @@
-#!/usr/bin/env bash
-# Order (first one that exists):
-#   ~/.bash_profile
-#   ~/.bash_login
-#   ~/.profile
-
 if [[ $DF_DEBUG ]]; then
     echo -e "\033[1;32mLoaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 fi
-
-# Local variables
-SHORT_USER="$USER"
-DOTFILES="$HOME/dotfiles"
 
 # PATH
 if [[ -d /usr/local/bin ]]; then
@@ -21,11 +11,13 @@ if [[ -d /usr/local/sbin ]]; then
     export PATH="/usr/local/sbin:$PATH"
 fi
 
-if [[ -d "$HOME/bin" ]]; then
-    export PATH="$HOME/bin:$PATH"
+if [[ -d "${HOME}/bin" ]]; then
+    export PATH="${HOME}/bin:$PATH"
 fi
 
 # Exported variables
+export SHORT_USER="$USER"
+export DOTFILES="$HOME/dotfiles"
 export UNAME=$(uname)
 export EDITOR='nano -w'
 export GIT_EDITOR='nano -w'
@@ -76,3 +68,9 @@ for filepath in $DOTFILES/custom/*.bash; do
 done
 
 [[ -e $DOTFILES/custom/after.bash ]] && source $DOTFILES/custom/after.bash
+
+# Unset local variables
+unset DF_DEBUG
+unset filename
+unset filepath
+unset item_type

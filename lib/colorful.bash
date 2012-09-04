@@ -12,6 +12,7 @@ else
   export LSCOLORS='Gxfxcxdxdxegedabagacad'
 fi
 
+SYMBOL_ARROW='→'
 SYMBOL_NEGATIVE='✗'
 SYMBOL_POSITIVE='✓'
 SYMBOL_NEUTRAL='○'

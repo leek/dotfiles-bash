@@ -91,7 +91,9 @@ function _df_enable_item() {
             _df_echo_file_status $NEUTRAL $filepath
             return
         fi
-        ln -sF "$availpath" "$enabledpath"
+        cd "$DOTFILES/$1/enabled"
+        ln -sF "../available/$filename"
+        cd -
         if [[ -L $enabledpath ]]; then
             _df_echo_file_status $POSITIVE $filepath
             return

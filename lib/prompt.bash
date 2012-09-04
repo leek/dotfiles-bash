@@ -32,29 +32,29 @@ function git_prompt {
             case $gitps1 in
                 *\* )
                     # Unstaged
-                    echo -en "${red}${gitps1/ */} "
+                    echo -e "${red}${gitps1/ */} "
                     ;;
                 *\+ )
                     # Staged
-                    echo -en "${yellow}${gitps1/ */} "
+                    echo -e "${yellow}${gitps1/ */} "
                     ;;
                 * )
-                    echo -en "${green}${gitps1} "
+                    echo -e "${green}${gitps1} "
             esac
         else
-            echo -en "${bold_red}${gitps1} "
+            echo -e "${bold_red}${gitps1} "
         fi
     fi
 }
 
 function prompt_status() {
     if [ $? = 0 ]; then
-        echo -en "${green}${SYMBOL_POSITIVE} ${reset_color}";
+        echo -e "${green}${SYMBOL_POSITIVE} ${reset_color}";
     else
-        echo -en "${red}${SYMBOL_NEGATIVE} ${reset_color}";
+        echo -e "${red}${SYMBOL_NEGATIVE} ${reset_color}";
     fi
 }
 
 function update_title() {
-    PS1="$PS1\$(echo -n -e \"\033]0;$SHORT_USER@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007\")"
+    echo -e "\033]0;$SHORT_USER@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007"
 }

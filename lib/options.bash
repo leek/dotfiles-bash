@@ -10,6 +10,9 @@ shopt -s cdspell
 # Check the window size after each command and update LINES/COLUMNS
 shopt -s checkwinsize
 
+# Don't close Terminal when sending CTRL+D
+shopt -s -o ignoreeof
+
 # Enable some Bash 4 features when possible:
 #   * `autocd`, e.g. `**/qux` will enter `./foo/bar/baz/qux`
 #   * Recursive globbing, e.g. `echo **/*.txt`

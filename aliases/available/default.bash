@@ -2,7 +2,7 @@
 
 [[ $DF_DEBUG ]] && echo -e "\033[1;32m  Alias Loaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 
-alias ls="ls -GAFh"
+alias ls="ls -AFh"
 alias ll="ls -l"
 alias lsd='ll | grep "^d"'
 alias cd..="cd .."
