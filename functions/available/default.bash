@@ -35,34 +35,10 @@ pcurl () {
     curl "${1}" | open -f -a $PREVIEW
 }
 
-usage () {
-    if [ $(uname) = "Darwin" ]; then
-        if [ -n $1 ]; then
-            du -hd $1
-        else
-            du -hd 1
-        fi
-    elif [ $(uname) = "Linux" ]; then
-        if [ -n $1 ]; then
-            du -h --max-depth=1 $1
-        else
-            du -h --max-depth=1
-        fi
-    fi
-}
-
-command_exists () {
-    type "$1" &> /dev/null ;
-}
-
 mkbak () {
     local filename=$1
     local filetime=$(date +%Y%m%d_%H%M%S)
     cp ${filename} ${filename}_${filetime}
-}
-
-trash() {
-    mv $@ ~/.Trash/
 }
 
 function ask {
@@ -102,7 +78,7 @@ function ii()
     echo -e "\n${RED}Current date :$NC " ; date
     echo -e "\n${RED}Machine stats :$NC " ; uptime
     echo -e "\n${RED}Memory stats :$NC " ; free
-    my_ip 2>&- ;
+    myip 2>&- ;
     echo -e "\n${RED}Local IP Address :$NC" ; echo ${MY_IP:-"Not connected"}
     echo -e "\n${RED}ISP Address :$NC" ; echo ${MY_ISP:-"Not connected"}
     echo -e "\n${RED}Open connections :$NC "; netstat -pan --inet;

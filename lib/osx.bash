@@ -16,15 +16,15 @@ fi
 
 # grc
 if [ -f $HOMEBREW_PREFIX/etc/grc.bashrc ]; then
-    . $HOMEBREW_PREFIX/etc/grc.bashrc
+    source $HOMEBREW_PREFIX/etc/grc.bashrc
 fi
 
 # Editor defaults
-if [[ -x "`which subl`" ]]; then
+if command_exists "subl"; then
     EDITOR='subl -w'
     GIT_EDITOR='subl -w'
     LESSEDIT='subl %f:%1m'
-elif [[ -x "`which mate`" ]]; then
+elif command_exists "mate"; then
     EDITOR='mate -w'
     GIT_EDITOR='mate -w'
     LESSEDIT='mate -l %lm %f'
@@ -35,7 +35,16 @@ if [[ -s "$HOME/.rvm/scripts/rvm" ]]; then
     source "$HOME/.rvm/scripts/rvm"
 fi
 
-# Add global node_modules to PATH if available
-if [[ -d /usr/local/lib/node_modules ]]; then
-    export NODE_PATH="/usr/local/lib/node_modules"
+# Taken from /etc/bashrc on OSX 10.8
+if [ "$TERM_PROGRAM" == "iTerm.app" ] && [ -z "$INSIDE_EMACS" ]; then
+    update_terminal_cwd() {
+        # Identify the directory using a "file:" scheme URL,
+        # including the host name to disambiguate local vs.
+        # remote connections. Percent-escape spaces.
+        local SEARCH=' '
+        local REPLACE='%20'
+        local PWD_URL="file://$HOSTNAME${PWD//$SEARCH/$REPLACE}"
+        printf '\e]7;%s\a' "$PWD_URL"
+    }
+    PROMPT_COMMAND="update_terminal_cwd; $PROMPT_COMMAND"
 fi

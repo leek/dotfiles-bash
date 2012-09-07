@@ -2,7 +2,9 @@
 
 [[ $DF_DEBUG ]] && echo -e "\033[1;32mAlias Loaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 
+alias flushdns='sudo dscacheutil -flushcache'
 alias s="subl"
+alias sublh="subl ."
 alias m="mate"
 alias preview="open -a '$PREVIEW'"
 alias safari="open -a safari"
@@ -21,12 +23,12 @@ alias clean-ds_store="find . -name '*.DS_Store' -type f -ls -delete"
 alias clean-asl="sudo rm -rf /private/var/log/asl/*.asl"
 
 # Default overrides
-if [[ -x "$(which gls)" ]]; then
+if command_exists "gls"; then
     alias ls="gls -AFh --color=auto"
 else
-    alias ls="gls -GAFh"
+    alias ls="ls -GAFh"
 fi
 
 # Quick edit
-alias open-sshconfig="${EDITOR} ~/.ssh/config"
-alias open-etchosts="${EDITOR} /etc/hosts"
+alias qed-sshconfig="${EDITOR} ~/.ssh/config"
+alias qed-etchosts="${EDITOR} /etc/hosts"

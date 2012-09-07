@@ -1,6 +1,6 @@
-if [[ $DF_DEBUG ]]; then
-    echo -e "\033[1;32mLoaded:\033[39m $(basename ${BASH_SOURCE[0]})"
-fi
+#!/usr/bin/env bash
+
+[[ $DF_DEBUG ]] && echo -e "\033[1;32mLoaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 
 # PATH
 if [[ -d /usr/local/bin ]]; then
@@ -13,6 +13,11 @@ fi
 
 if [[ -d "${HOME}/bin" ]]; then
     export PATH="${HOME}/bin:$PATH"
+fi
+
+# Add global node_modules to PATH if available
+if [[ -d /usr/local/lib/node_modules ]]; then
+    export NODE_PATH="/usr/local/lib/node_modules"
 fi
 
 # Exported variables
@@ -28,6 +33,7 @@ export MAKEFLAGS='-j 3'
 export LC_ALL="en_US.UTF-8"
 export LANG="en_US"
 export LC_CTYPE="en_US.UTF-8"
+export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 
 unset MAILCHECK
 set -o notify

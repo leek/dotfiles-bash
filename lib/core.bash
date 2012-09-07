@@ -16,6 +16,15 @@ path_unshift() {
     fi
 }
 
+# Quick check if a command exists
+command_exists () {
+    type "$1" &> /dev/null ;
+}
+
+#
+# Dotfiles specific
+#
+
 function _df_load_enabled_by_type() {
     local path="$DOTFILES/$1/enabled"
     if [[ -d $path ]]; then

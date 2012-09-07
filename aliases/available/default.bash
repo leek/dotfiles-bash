@@ -2,7 +2,6 @@
 
 [[ $DF_DEBUG ]] && echo -e "\033[1;32m  Alias Loaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 
-alias ls="ls -AFh"
 alias ll="ls -l"
 alias lsd='ll | grep "^d"'
 alias cd..="cd .."
@@ -10,7 +9,6 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias -- -='cd -'
-alias grep="grep --color=auto"
 alias timestamp='gawk "{now=strftime(\"%F %T \"); print now \$0; fflush(); }"'
 alias cls="clear"
 alias c="clear"

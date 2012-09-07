@@ -9,6 +9,7 @@
     st = status
     ci = commit
     co = checkout
+    cl = clone
     branches = branch -a
     unadd = reset HEAD
     amend = commit -a --amend
@@ -16,6 +17,7 @@
     last = log -1 HEAD
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	diff = diff -w
+    delbranch = branch -D
 [color]
 	ui = auto
     branch = auto

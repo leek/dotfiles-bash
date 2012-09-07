@@ -47,6 +47,13 @@ function git_prompt {
     fi
 }
 
+function right_align() {
+    local output=$1
+    local prompt_cols=${#PS1}
+    local push_cols=$((COLUMNS-prompt_cols))
+    echo -e "\033[s\033[${push_cols}C${output}\033[u"
+}
+
 function prompt_status() {
     if [ $? = 0 ]; then
         echo -e "${green}${SYMBOL_POSITIVE} ${reset_color}";
