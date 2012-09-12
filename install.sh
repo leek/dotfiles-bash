@@ -212,17 +212,17 @@ echo -en "${echo_yellow}Install commands/scripts?${echo_reset_color}"
 if ask "" Y; then
     sourcepath=$DOTFILES/resources/scripts
     destpath=/usr/local/bin
-    for current in "ssh-copy-id" "service"; do
+    for current in "ssh-copy-id" "service" "pidof"; do
         if [[ -e "${sourcepath}/${current}.sh" ]]; then
-            if [[ ! -x "$(which ${current})" ]]; then
+            if command_exists $current; then
+                _df_echo_file_status $NEUTRAL "${current}"
+            else
                 ln -s "${sourcepath}/${current}.sh" "${destpath}/${current}" && chmod +x "${destpath}/${current}"
                 if [[ -x "${destpath}/${current}" ]]; then
                     _df_echo_file_status $POSITIVE "${current}"
                 else
                     _df_echo_file_status $NEGATIVE "${current}"
                 fi
-            else
-                _df_echo_file_status $NEUTRAL "${current}"
             fi
         fi
     done

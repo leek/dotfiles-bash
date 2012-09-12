@@ -2,6 +2,12 @@
 
 [[ $DF_DEBUG ]] && echo -e "\033[1;32m  Loaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 
+# PHP 5.4
+HOMEBREW_PHP_PREFIX="$(brew --prefix php54)"
+if [[ -d "${HOMEBREW_PHP_PREFIX}/bin" ]]; then
+    export PATH="${HOMEBREW_PHP_PREFIX}/bin:$PATH"
+fi
+
 # export GEM_HOME="$HOME/.gem"
 # export GEM_PATH="$GEM_HOME:/Library/Ruby/Gems/1.8"
 export RUBYOPT=rubygems

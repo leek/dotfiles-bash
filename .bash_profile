@@ -3,12 +3,12 @@
 [[ $DF_DEBUG ]] && echo -e "\033[1;32mLoaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 
 # PATH
-if [[ -d /usr/local/bin ]]; then
-    export PATH="/usr/local/bin:$PATH"
-fi
-
 if [[ -d /usr/local/sbin ]]; then
     export PATH="/usr/local/sbin:$PATH"
+fi
+
+if [[ -d /usr/local/bin ]]; then
+    export PATH="/usr/local/bin:$PATH"
 fi
 
 if [[ -d "${HOME}/bin" ]]; then
@@ -16,9 +16,9 @@ if [[ -d "${HOME}/bin" ]]; then
 fi
 
 # Add global node_modules to PATH if available
-if [[ -d /usr/local/lib/node_modules ]]; then
-    export NODE_PATH="/usr/local/lib/node_modules"
-fi
+# if [[ -d /usr/local/lib/node_modules ]]; then
+#     export NODE_PATH="/usr/local/lib/node_modules"
+# fi
 
 # Exported variables
 export SHORT_USER="$USER"
@@ -34,6 +34,18 @@ export LC_ALL="en_US.UTF-8"
 export LANG="en_US"
 export LC_CTYPE="en_US.UTF-8"
 export PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+
+# Colors
+export BLACK=$(tput setaf 0)
+export RED=$(tput setaf 1)
+export GREEN=$(tput setaf 2)
+export YELLOW=$(tput setaf 3)
+export BLUE=$(tput setaf 4)
+export MAGENTA=$(tput setaf 5)
+export CYAN=$(tput setaf 6)
+export NORMAL=$(tput setaf 7)
+export BOLD=$(tput bold)
+export RESET=$(tput sgr0)
 
 unset MAILCHECK
 set -o notify
