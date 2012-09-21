@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+DF_DEBUG=1
 [[ $DF_DEBUG ]] && echo -e "\033[1;32mLoaded:\033[39m $(basename ${BASH_SOURCE[0]})"
 
 # PATH
@@ -50,14 +51,21 @@ export RESET=$(tput sgr0)
 unset MAILCHECK
 set -o notify
 
-source $DOTFILES/lib/history.bash
+#
+# History control
+HISTCONTROL=ignoredups:ignorespace
+HISTSIZE=1000
+HISTFILESIZE=2000
+HISTIGNORE="&:ls:ls *:cd:cd -:pwd;exit:date:* --help *:mutt:[bf]g:exit"
+HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S  "
+
+#
+# Options
 source $DOTFILES/lib/options.bash
 
 [[ -e $DOTFILES/custom/before.bash ]] && source $DOTFILES/custom/before.bash
 
-source $DOTFILES/lib/core.bash
 source $DOTFILES/lib/colors.bash
-source $DOTFILES/lib/history.bash
 source $DOTFILES/lib/colorful.bash
 
 if [[ -e $DOTFILES/.bash_prompt ]]; then
@@ -73,7 +81,9 @@ fi
 
 # Load enabled types
 for item_type in "aliases" "completions" "functions"; do
-    _df_load_enabled_by_type $item_type
+    for item_file in $DOTFILES/$item_type/enabled/*; do
+        [[ -e $item_file ]] && source $item_file
+    done
 done
 
 # Load all custom
@@ -88,7 +98,7 @@ done
 [[ -e $DOTFILES/custom/after.bash ]] && source $DOTFILES/custom/after.bash
 
 # Unset local variables
-unset DF_DEBUG
 unset filename
 unset filepath
 unset item_type
+unset item_file

@@ -26,11 +26,11 @@ if [ -f $HOMEBREW_PREFIX/etc/grc.bashrc ]; then
 fi
 
 # Editor defaults
-if command_exists "subl"; then
+if type "subl" &> /dev/null; then
     EDITOR='subl -w'
     GIT_EDITOR='subl -w'
     LESSEDIT='subl %f:%1m'
-elif command_exists "mate"; then
+elif type "mate" &> /dev/null; then
     EDITOR='mate -w'
     GIT_EDITOR='mate -w'
     LESSEDIT='mate -l %lm %f'

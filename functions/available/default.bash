@@ -102,3 +102,22 @@ function in_array() {
     done
     return 1
 }
+
+# Add to end of $PATH
+path_push() {
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH="$PATH:$1"
+    fi
+}
+
+# Prepend to beginning of $PATH
+path_unshift() {
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH="$1:$PATH"
+    fi
+}
+
+# Quick check if a command exists
+command_exists () {
+    type "$1" &> /dev/null;
+}

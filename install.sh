@@ -8,7 +8,6 @@ POSITIVE=0
 NEGATIVE=1
 NEUTRAL=2
 
-# So we have colors available
 source $DOTFILES/lib/colors.bash
 source $DOTFILES/lib/colorful.bash
 source $DOTFILES/functions/available/default.bash
@@ -54,7 +53,8 @@ function _df_install_to_home() {
     if [[ -e $filepath ]]; then
         if [[ -e "$HOME/$filename" ]]; then
             if [[ -L "$HOME/$filename" ]]; then
-                _df_echo_file_status $NEUTRAL $filepath
+                # Link already exists
+                _df_echo_file_status $NEUTRAL $filepath "\033[1;30m(Link already exists)"
                 return
             else
                 if [[ $BACKUP_FILES == 1 ]]; then
@@ -83,18 +83,19 @@ function _df_install_to_home() {
 }
 
 function _df_enable_item() {
-    local filename="$(basename $2)"
-    local enabledpath="$DOTFILES/$1/enabled/$filename"
-    local availpath="$DOTFILES/$1/available/$2"
-    if [[ -e $availpath ]]; then
-        if [[ -e $enabledpath ]]; then
-            _df_echo_file_status $NEUTRAL $filepath
-            return
-        fi
-        cd "$DOTFILES/$1/enabled"
-        ln -sF "../available/$filename"
-        cd -
-        if [[ -L $enabledpath ]]; then
+    local df_type="${1:-}"
+    local df_item="${2:-}"
+    local enabled_path="${DOTFILES}/${df_type}/enabled"
+    local available_path="${DOTFILES}/${df_type}/available/${df_item}"
+    local filename="$(basename $available_path)"
+    if [[ -e "${enabled_path}/${filename}" ]]; then
+        # Already enabled
+        _df_echo_file_status $NEUTRAL $filepath "\033[1;30m(Item already enabled)"
+        return
+    fi
+    if [[ -e $available_path ]]; then
+        (cd $enabled_path && ln -sF "../available/${df_item}")
+        if [[ -L "${enabled_path}/${filename}" ]]; then
             _df_echo_file_status $POSITIVE $filepath
             return
         fi
@@ -160,17 +161,17 @@ if ask "" Y; then
     for filepath in $DOTFILES/rc-files/.*; do
         filename="$(basename $filepath)"
         if [[ $filename == ".gemrc" ]]; then
-            if [[ ! -x "$(which gem)" ]]; then
+            if type "gem" &> /dev/null; then
                 _df_echo_file_status $NEUTRAL "${filename}"
                 continue
             fi
         elif [[ $filename == ".npmrc" ]]; then
-            if [[ ! -x "$(which npm)" ]]; then
+            if type "npm" &> /dev/null; then
                 _df_echo_file_status $NEUTRAL "${filename}"
                 continue
             fi
         elif [[ $filename == ".mongorc.js" ]]; then
-            if [[ ! -x "$(which mongo)" ]]; then
+            if type "mongo" &> /dev/null; then
                 _df_echo_file_status $NEUTRAL "${filename}"
                 continue
             fi
@@ -195,6 +196,7 @@ if ask "" Y; then
     for filepath in $DOTFILES/resources/.git*; do
         filename="$(basename $filepath)"
         if [[ $filename == '.gitconfig' ]]; then
+            # Copy .gitconfig instead of link so we can add usernames/etc
             if [[ ! -e $filepath ]]; then
                 cp -R "$filepath" .
             else
@@ -214,7 +216,7 @@ if ask "" Y; then
     destpath=/usr/local/bin
     for current in "ssh-copy-id" "service" "pidof"; do
         if [[ -e "${sourcepath}/${current}.sh" ]]; then
-            if command_exists $current; then
+            if type "$current" &> /dev/null; then
                 _df_echo_file_status $NEUTRAL "${current}"
             else
                 ln -s "${sourcepath}/${current}.sh" "${destpath}/${current}" && chmod +x "${destpath}/${current}"

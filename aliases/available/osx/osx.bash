@@ -23,7 +23,7 @@ alias clean-ds_store="find . -name '*.DS_Store' -type f -ls -delete"
 alias clean-asl="sudo rm -rf /private/var/log/asl/*.asl"
 
 # Default overrides
-if command_exists "gls"; then
+if type "gls" &> /dev/null; then
     alias ls="gls -AFh --color=auto"
 else
     alias ls="ls -GAFh"
